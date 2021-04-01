@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Figure index{% endblock %}
+
+{% block body %}
+<main role="main">
+    <!-- JUMBOTRON -->
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">Snow Tricks</h1>
+            <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
+            <div class="navarrow bottomright text-white"><a class="anchor-scroll" href="#trick" data-class-to="trick" data-on-scroll="blur-effect"><i class="fas fa-arrow-circle-down"></i></a></div>
+        </div>
+    </div><!-- END JUMBOTRON -->
+
+    <!-- LISTE FIGURES -->
+    <div class="trick py-5 bg-light" id="trick">
+
+        <div class="container-fluid">
+            <div class="row">
+                {% for figure in figures %}
+                    <div class="col-md-3"><!-- FIGURE -->
+                        <div class="card mb-4 box-shadow">
+                            <img class="card-img-top" src="{{ asset('images/exemple.jpeg') }}" alt="Card image cap">
+
+                            <div class="card-body">
+
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <strong><a href="{{ path('figure_show', {'id': figure.id}) }}">{{ figure.name }}</a></strong>
+
+                                    <span><a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="far fa-edit"></i></a>
+
+                      <button type="button" class="btn" data-toggle="modal" data-target="#deleteModal">
+                        <i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i>
+                      </button>
+                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div><!-- END FIGURE -->
+                {% endfor %}
+            </div> <!-- END ROW FIGURE-->
+        </div> <!-- END CONTAINER FIGURE-->
+        <p class="float-right">
+            <a class="anchor-scroll floatnav-bottom floatnav btn-floating btn-lg btn-flat" href="#navbarHeader" data-class-to="navbarHeader" data-on-scroll="blur-effect"><i class="fas fa-arrow-circle-up navarrow my-floatnav"></i></a>
+        </p>
+    </div><!-- END LISTE FIGURES -->
+</main>
+
+    <!-- Delete Modal -->
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <p>Etes vous sur de vouloir supprimer ce Trick ?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Ok</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <a href="{{ path('figure_new') }}">Create new</a>
+{% endblock %}

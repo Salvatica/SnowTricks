@@ -54,11 +54,20 @@ class User
      */
     private $figure;
 
+
+
+
     public function __construct()
     {
         $this->comment = new ArrayCollection();
         $this->figure = new ArrayCollection();
     }
+
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
 
     public function getId(): ?int
     {
@@ -184,4 +193,5 @@ class User
 
         return $this;
     }
+
 }

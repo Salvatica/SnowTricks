@@ -25,25 +25,16 @@ class Figure
     private $name;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="text")
      */
     private $description;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Media::class, mappedBy="figure", orphanRemoval=true)
-     */
-    private $media;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure")
      */
     private $comment;
 
-    /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="figure")
-     * @ORM\JoinColumn(nullable=false)
-     */
-    private $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="figure")
@@ -51,10 +42,32 @@ class Figure
      */
     private $category;
 
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $created_at;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $update_date;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $figure_image;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $figure_video;
+
     public function __construct()
     {
-        $this->media = new ArrayCollection();
+
         $this->comment = new ArrayCollection();
+        $this->created_at = new \DateTime();
+        $this->update_date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -86,35 +99,7 @@ class Figure
         return $this;
     }
 
-    /**
-     * @return Collection|Media[]
-     */
-    public function getMedia(): Collection
-    {
-        return $this->media;
-    }
 
-    public function addMedium(Media $medium): self
-    {
-        if (!$this->media->contains($medium)) {
-            $this->media[] = $medium;
-            $medium->setFigure($this);
-        }
-
-        return $this;
-    }
-
-    public function removeMedium(Media $medium): self
-    {
-        if ($this->media->removeElement($medium)) {
-            // set the owning side to null (unless already changed)
-            if ($medium->getFigure() === $this) {
-                $medium->setFigure(null);
-            }
-        }
-
-        return $this;
-    }
 
     /**
      * @return Collection|Comment[]
@@ -146,17 +131,6 @@ class Figure
         return $this;
     }
 
-    public function getUser(): ?User
-    {
-        return $this->user;
-    }
-
-    public function setUser(?User $user): self
-    {
-        $this->user = $user;
-
-        return $this;
-    }
 
     public function getCategory(): ?Category
     {
@@ -166,6 +140,54 @@ class Figure
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->created_at;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $created_at): self
+    {
+        $this->created_at = $created_at;
+
+        return $this;
+    }
+
+    public function getUpdateDate(): ?\DateTimeInterface
+    {
+        return $this->update_date;
+    }
+
+    public function setUpdateDate(\DateTimeInterface $update_date): self
+    {
+        $this->update_date = $update_date;
+
+        return $this;
+    }
+
+    public function getFigureImage(): ?string
+    {
+        return $this->figure_image;
+    }
+
+    public function setFigureImage(?string $figure_image): self
+    {
+        $this->figure_image = $figure_image;
+
+        return $this;
+    }
+
+    public function getFigureVideo(): ?string
+    {
+        return $this->figure_video;
+    }
+
+    public function setFigureVideo(?string $figure_video): self
+    {
+        $this->figure_video = $figure_video;
 
         return $this;
     }

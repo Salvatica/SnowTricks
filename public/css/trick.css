@@ -1,0 +1,90 @@
+:root {
+  --jumbotron-padding-y: 3rem;
+}
+.floatnav{
+	position:fixed;
+	bottom:8px;
+	right:0px;
+
+}
+.floatnav-bottom{
+  display: none;
+}
+
+.my-floatnav{
+	margin-top:22px;
+}
+a { color: inherit; } 
+.jumbotron {
+  padding-top: var(--jumbotron-padding-y);
+  padding-bottom: var(--jumbotron-padding-y);
+  margin-bottom: 0;
+  height: 100vh;
+  background: #fff url("../images/fond.jpg") no-repeat center center;
+  -webkit-background-size: 100% 100%;
+  -moz-background-size: 100% 100%;
+  -o-background-size: 100% 100%;
+  background-size: 100% 100%;
+}
+  .lead{
+  padding: 1rem;
+  background-color:rgba(255,255,255,0.5);
+}
+.bottomright {
+  position: absolute;
+  bottom: 8px;
+  right: 16px;
+}
+
+.navarrow {
+  font-size: xx-large;
+}
+
+@media (orientation: portrait) {
+    .jumbotron {
+        background: url("../images/fond-portrait.png") no-repeat center center;
+    }
+  }
+
+@media (min-width: 768px) {
+  .jumbotron {
+    padding-top: calc(var(--jumbotron-padding-y) * 2);
+    padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+    
+  }
+}
+
+.jumbotron p:last-child {
+  margin-bottom: 0;
+}
+
+.jumbotron-heading {
+  font-weight: 300;
+}
+
+.jumbotron .container {
+  max-width: 40rem;
+}
+
+footer {
+  padding-top: 3rem;
+  padding-bottom: 3rem;
+}
+
+footer p {
+  margin-bottom: .25rem;
+}
+
+.box-shadow { box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05); }
+
+#action-icons
+{
+  position:absolute;
+  right: 300px;
+}
+.photo-list{
+  background-color:rgba(255,255,255,0.5);
+}
+
+
+

@@ -1,0 +1,79 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Figure{% endblock %}
+
+{% block body %}
+
+
+    <div class ="container">
+        <div class="row mb-4">
+            <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid" alt="Responsive image">
+
+
+            <div id="action-icons" >
+                <span>
+
+            <a href="{{ path('figure_edit', {'id': figure.id}) }}"><i class="far fa-edit"></i></a>
+                <button type="button" class="btn" data-toggle="modal" data-target="#deleteModal">
+                    <i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i>
+                 </button>
+
+                </span>
+            </div>
+            </div>
+        </div>
+<div class="container-fluid">
+
+    <div class="row mb-4">
+        <div class="col-md-2 photo-list embed-responsive-16by9">
+            <img src="{{ asset('images/exemple.jpeg') }}" class="img-thumbnail" alt="...">
+        </div>
+        <div class="col-md-2 photo-list">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe
+                        class="embed-responsive-item img-thumbnail"
+                        src="https://www.youtube.com/embed/M_BOfGX0aGs"
+                        frameborder="0"
+                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                </iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<section class="articles">
+    <div class="container">
+
+        <article>
+
+            <h2>{{ figure.name }}</h2>
+
+            <div class="content">
+                <h6>{{ figure.description }}</h6>
+
+                <div class="metadata">Ecrit le {{ figure.createdAt | date ('d/m/y')}} à {{ figure.createdAt | date('H:i') }} dans la catégorie {{ figure.category }} modifié le {{ figure.updateDate | date ('d/m/y')}}</div>
+
+
+
+            </div>
+        </article>
+
+
+</div>
+
+
+
+
+    <a href="{{ path('figure_index') }}">back to home</a>
+
+    <a href="{{ path('figure_edit', {'id': figure.id}) }}">edit</a>
+
+    {{ include('figure/_delete_form.html.twig') }}
+
+
+
+{% endblock %}
