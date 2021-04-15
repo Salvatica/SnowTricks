@@ -3,13 +3,104 @@
 {% block title %}Edit Figure{% endblock %}
 
 {% block body %}
-    <h1>Edit Figure</h1>
+    <div>
+
+        <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
+
+        <div class="position">
+            <div class="float-right">
+            <a href="{{ path('figure_edit', {'id': figure.id}) }}" >
+                <i class="far fa-edit"></i>
+
+            </a>
+
+                    <button class="btn"><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                    </button>
+
+        </div>
+        </div>
+
+    </div>
+    <div class="container-fluid">
+
+        <div class="row mb-4">
+            <div class="col-md-2 photo-list embed-responsive-16by9">
+                <img src="{{ asset('images/exemple.jpeg') }}" class="img-thumbnail" alt="...">
+                <div class="position-absolute">
+                    <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+                        <i class="far fa-edit"></i>
+                    </a>
+
+                    <button type="button" class="btn" data-toggle="modal" data-target="#deleteModal">
+                        <i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i>
+                    </button>
+
+                </div>
+
+            </div>
+            <div class="col-md-2 photo-list">
+                <div class="embed-responsive embed-responsive-16by9">
+                    <iframe
+                            class="embed-responsive-item img-thumbnail"
+                            src="https://www.youtube.com/embed/M_BOfGX0aGs"
+                            frameborder="0"
+                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                            allowfullscreen>
+
+                    </iframe>
+
+                </div>
+                <div class="position-absolute">
+                    <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+                        <i class="far fa-edit"></i>
+                    </a>
+
+
+                            <button class="btn"><i class="fas fa-trash-alt" data-toggle="modal"
+                                                   data-target="#exampleModal"></i></button>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-sm-4 offset-sm-3">
+
+            {{ form_start(form) }}
+
+            <h4>Nom</h4>
+            <div class="form-floating mb-4">
+                {{ form_widget(form.name) }}
+            </div>
+
+            <h4>Description</h4>
+            <div class="form-floating mb-4">
+                {{ form_widget(form.description) }}
+            </div>
+
+            <h4>Catégorie</h4>
+            <div class="form-floating mb-4">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        {{ form_widget(form.category) }}
+                    </div>
+                </div>
+            </div>
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>
+                <button class="btn btn-primary btn-sm">{{ button_label|default('Validate') }}</button>
+
+
+            </div>
+
+            {{ form_end(form) }}
+
+        </div>
+    </div>
 
 
 
-    {{ include('figure/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('figure_index') }}">back to list</a>
-
-    {{ include('figure/_delete_form.html.twig') }}
 {% endblock %}

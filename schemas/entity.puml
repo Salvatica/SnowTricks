@@ -1,0 +1,39 @@
+@startuml
+class Figure {
+-id
+-name
+-description
+-figure_image
+-figure_video
+-update_date
+-created_at
+}
+
+
+class User {
+-id
+-nom
+-mail
+-mdp
+-roles
+-photo
+}
+
+class Comment{
+-id
+-content
+-date
+}
+
+class Category{
+-id
+-title
+-description
+}
+
+
+
+Comment"*"--"1" User
+Comment "*"--"1" Figure
+Category "1"--"*" Figure
+@enduml

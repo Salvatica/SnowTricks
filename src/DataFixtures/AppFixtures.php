@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\Category;
+use App\Entity\Comment;
 use App\Entity\Figure;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -27,6 +28,15 @@ class AppFixtures extends Fixture
             $figure->setCategory($category);
 
             $manager->persist($figure);
+
+        }
+
+        for($i = 0; $i < 10 ; $i++){
+            $comment = new Comment();
+            $comment->setContent("Mon commentaire ".$i) ;
+            $comment->setFigure($figure);
+
+            $manager->persist($comment);
 
         }
 

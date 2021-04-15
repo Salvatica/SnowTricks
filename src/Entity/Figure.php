@@ -31,9 +31,9 @@ class Figure
 
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure")
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure", cascade={"remove"})
      */
-    private $comment;
+    private $comments;
 
 
     /**
@@ -65,7 +65,7 @@ class Figure
     public function __construct()
     {
 
-        $this->comment = new ArrayCollection();
+        $this->comments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->update_date = new \DateTime();
     }
@@ -100,19 +100,18 @@ class Figure
     }
 
 
-
     /**
      * @return Collection|Comment[]
      */
-    public function getComment(): Collection
+    public function getComments(): Collection
     {
-        return $this->comment;
+        return $this->comments;
     }
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comment->contains($comment)) {
-            $this->comment[] = $comment;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
             $comment->setFigure($this);
         }
 
@@ -121,7 +120,7 @@ class Figure
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->comment->removeElement($comment)) {
+        if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
             if ($comment->getFigure() === $this) {
                 $comment->setFigure(null);

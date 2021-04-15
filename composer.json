@@ -1,5 +1,7 @@
 {
     "type": "project",
+    "name": "salvatica/snowtricks",
+    "description": "snowtricks",
     "license": "proprietary",
     "minimum-stability": "dev",
     "prefer-stable": true,

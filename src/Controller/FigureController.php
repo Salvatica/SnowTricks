@@ -13,13 +13,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
-    #[Route('/', name: 'figure_index', methods: ['GET'])]
-    public function index(FigureRepository $figureRepository): Response
-    {
-        return $this->render('figure/index.html.twig', [
-            'figures' => $figureRepository->findAll(),
-        ]);
-    }
 
     #[Route('/new', name: 'figure_new', methods: ['GET', 'POST'])]
     public function new(Request $request): Response
@@ -33,12 +26,12 @@ class FigureController extends AbstractController
             $entityManager->persist($figure);
             $entityManager->flush();
 
-            return $this->redirectToRoute('figure_index');
+            return $this->redirectToRoute('figure_show', ['id'=>$figure->getId()]);
         }
 
-        return $this->render('figure/new.html.twig', [
+        return $this->render('figure/edit.html.twig', [
             'figure' => $figure,
-            'form' => $form->createView(),
+            'form' => $form->createView()
         ]);
     }
 
@@ -59,7 +52,7 @@ class FigureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
 
-            return $this->redirectToRoute('figure_index');
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('figure/edit.html.twig', [
@@ -77,6 +70,8 @@ class FigureController extends AbstractController
             $entityManager->flush();
         }
 
-        return $this->redirectToRoute('figure_index');
+        return $this->redirectToRoute('homepage');
     }
+
+
 }
