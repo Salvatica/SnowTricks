@@ -1,21 +1,30 @@
 {% extends 'base.html.twig' %}
 
 {% form_theme formFigure 'bootstrap_4_layout.html.twig' %}
-
+{% block title %}New Figure{% endblock %}
 
 {% block body %}
 
-    <h1>Création d'une figure !</h1>{# formulaire de création d'un article #}
-    <a href="{{ path('figure_create') }}">Create new</a>
+    <h2>Création d'une figure </h2>
+
+    <a href="{{ path('figure_new' ) }}"></a>
+
+
 
     {{ form_start(formFigure) }}
+    <div class="row">
+        <div class="col-sm-6 offset-sm-2">
+            {{ form_row(formFigure.name, {'attr': {'placeholder': "Titre de la figure"}}) }}
 
-    {{ form_row(formFigure.name, {'attr': {'placeholder': "Titre de la figure"}}) }}
+
     {{ form_row(formFigure.category) }}
-    {{ form_row(formFigure.description, {'attr': {'placeholder': "description"}}) }}
-    {{ form_row(formFigure.image, {'attr': {'placeholder': "image"}}) }}
 
-    <button type="submit" class="btn btn-success">
+    {{ form_row(formFigure.description, {'attr': {'placeholder': "description"}}) }}
+
+{#  {{ form_row(formFigure.image, {'attr': {'placeholder': "image"}}) }}#}
+
+    <button type="submit" class="btn btn-primary mb-4">
+
         {% if editMode %}
             Enregistrer la figure
 
@@ -25,7 +34,8 @@
         {% endif %}
 
     </button>
-
+    </div>
+    </div>
     {{ form_end(formFigure) }}
 
 
