@@ -6,22 +6,49 @@ use App\Entity\Figure;
 use App\Form\FigureType;
 use App\Repository\FigureRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\String\Slugger\SluggerInterface;
 
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
+    private $slugger;
+
+    public function __construct(SluggerInterface $slugger)
+    {
+        $this->slugger = $slugger;
+    }
 
     #[Route('/new', name: 'figure_new', methods: ['GET', 'POST'])]
+    #[Route('/{id}/edit', name: 'figure_edit')]
     public function new(Request $request): Response
     {
         $figure = new Figure();
         $form = $this->createForm(FigureType::class, $figure);
         $form->handleRequest($request);
 
+
+
         if ($form->isSubmitted() && $form->isValid()) {
+            $photo = $form->get('figureImage')->getData();
+            if($photo){
+                $originalFilename = pathinfo($photo->getClientOriginalName(), PATHINFO_FILENAME);
+                $safeFilename = $this->slugger->slug($originalFilename);
+                $newFilename = $safeFilename.'-'.uniqid('PIC', true).'.'.$photo->guessExtension();
+
+                try {
+                    $photo->move(
+                        $this->getParameter('photo_directory'),
+                        $newFilename
+                    );
+                } catch (FileException $e) {
+                    // ... handle exception if something happens during file upload
+                }
+                $figure->setFigureImage($newFilename);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($figure);
             $entityManager->flush();
@@ -29,9 +56,9 @@ class FigureController extends AbstractController
             return $this->redirectToRoute('figure_show', ['id'=>$figure->getId()]);
         }
 
-        return $this->render('figure/edit.html.twig', [
-            'figure' => $figure,
-            'form' => $form->createView()
+        return $this->render('figure/create.html.twig', [
+            'editMode' => $figure->getId() !== null,
+            'formFigure' => $form->createView()
         ]);
     }
 

@@ -53,14 +53,19 @@ class Figure
     private $update_date;
 
     /**
-     * @ORM\Column(type="string", length=255, nullable=true)
+     * @ORM\Column(name="figure_image", type="string", length=255, nullable=true)
      */
-    private $figure_image;
+    private $figureImage;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      */
-    private $figure_video;
+    private $figureVideo;
+
+    /**
+     * @ORM\Column(type="array", nullable=true)
+     */
+    private $figureImages = [];
 
     public function __construct()
     {
@@ -169,25 +174,45 @@ class Figure
 
     public function getFigureImage(): ?string
     {
-        return $this->figure_image;
+        return $this->figureImage;
     }
 
-    public function setFigureImage(?string $figure_image): self
+    public function setFigureImage(?string $figureImage): self
     {
-        $this->figure_image = $figure_image;
+        $this->figureImage = $figureImage;
 
         return $this;
     }
 
     public function getFigureVideo(): ?string
     {
-        return $this->figure_video;
+        return $this->figureVideo;
     }
 
-    public function setFigureVideo(?string $figure_video): self
+    public function setFigureVideo(?string $figureVideo): self
     {
-        $this->figure_video = $figure_video;
+        $this->figureVideo = $figureVideo;
 
         return $this;
     }
+
+    public function getFigureImages(): ?array
+    {
+        return $this->figureImages;
+    }
+
+    public function setFigureImages(?array $figureImages): self
+    {
+        $this->figureImages = $figureImages;
+
+        return $this;
+    }
+
+    public function addFigureImage(?string $figureImage): self
+    {
+        $this->figureImages[] = $figureImage;
+        return $this;
+    }
+
+
 }
