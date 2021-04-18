@@ -25,7 +25,7 @@ class FigureType extends AbstractType
                 'class'=> Category::class,
                 'choice_label'=>'title'
             ])
-            ->add('figureImage', FileType::class, [
+            ->add('figureImages', FileType::class, [
                 'label' => 'Image de la figure',
                 'mapped' => false,
                 'constraints' => [
@@ -39,6 +39,7 @@ class FigureType extends AbstractType
                     ])],
             ]);
     }
+
 
     public function configureOptions(OptionsResolver $resolver)
     {

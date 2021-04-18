@@ -11,22 +11,25 @@
             <div class="float-right">
             <a href="{{ path('figure_edit', {'id': figure.id}) }}" >
                 <i class="far fa-edit"></i>
-
             </a>
-
-                    <button class="btn"><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                    </button>
-
-        </div>
+                <button class="btn"><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                </button>
+            </div>
         </div>
 
     </div>
     <div class="container-fluid">
 
         <div class="row mb-4">
+            {% for photo in figure.figureImages %}
             <div class="col-md-2 photo-list embed-responsive-16by9">
-                <img src="{{ asset('images/exemple.jpeg') }}" class="img-thumbnail" alt="...">
-                <div class="position-absolute">
+                <div class="card mb-4 box-shadow">
+                <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail" alt="...">
+
+        </div>
+</div>
+
+                <div class="position">
                     <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
                         <i class="far fa-edit"></i>
                     </a>
@@ -37,30 +40,17 @@
 
                 </div>
 
-            </div>
-            <div class="col-md-2 photo-list">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe
-                            class="embed-responsive-item img-thumbnail"
-                            src="https://www.youtube.com/embed/M_BOfGX0aGs"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
+        {% endfor %}
 
-                    </iframe>
+            <iframe
+                    class="embed-responsive-item img-thumbnail"
+                    src="https://www.youtube.com/embed/M_BOfGX0aGs"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
 
-                </div>
-                <div class="position-absolute">
-                    <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
-                        <i class="far fa-edit"></i>
-                    </a>
+            </iframe>
 
-
-                            <button class="btn"><i class="fas fa-trash-alt" data-toggle="modal"
-                                                   data-target="#exampleModal"></i></button>
-
-
-                </div>
             </div>
         </div>
     </div>
@@ -88,15 +78,16 @@
                         {{ form_widget(form.category) }}
                     </div>
                 </div>
+
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>
                 <button class="btn btn-primary btn-sm">{{ button_label|default('Validate') }}</button>
 
-
             </div>
-
             {{ form_end(form) }}
+
+
 
         </div>
     </div>

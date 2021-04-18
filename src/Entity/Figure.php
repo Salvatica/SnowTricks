@@ -214,5 +214,14 @@ class Figure
         return $this;
     }
 
+    public function removeImage(?string $figureImage): self
+    {
+        $key = array_search($figureImage, $this->figureImages, false);
+        if($key !== null){
+            unset($key, $this->figureImages);
+        }
+        return $this;
+    }
+
 
 }

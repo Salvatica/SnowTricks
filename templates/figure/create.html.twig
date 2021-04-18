@@ -17,21 +17,13 @@
             {{ form_row(formFigure.name, {'attr': {'placeholder': "Titre de la figure"}}) }}
 
 
-    {{ form_row(formFigure.category) }}
+            {{ form_row(formFigure.category) }}
 
-    {{ form_row(formFigure.description, {'attr': {'placeholder': "description"}}) }}
+            {{ form_row(formFigure.description, {'attr': {'placeholder': "description"}}) }}
 
-{#  {{ form_row(formFigure.image, {'attr': {'placeholder': "image"}}) }}#}
+            {{ form_row(formFigure.figureImages, {'attr': {'placeholder': "image"}}) }}
 
-    <button type="submit" class="btn btn-primary mb-4">
-
-        {% if editMode %}
-            Enregistrer la figure
-
-        {% else %}
-
-            Ajouter la figure
-        {% endif %}
+    <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}
 
     </button>
     </div>
