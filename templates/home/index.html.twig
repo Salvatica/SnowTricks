@@ -16,6 +16,15 @@
             </div>
         </div><!-- END JUMBOTRON -->
 
+        {% for message in app.flashes('success') %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+
         <!-- LISTE FIGURES -->
         <div class="trick py-5 bg-light" id="trick">
 
@@ -62,7 +71,7 @@
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Suppression</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                        <span aria-hidden="true">&times</span>
                     </button>
                 </div>
                 <div class="modal-body">
@@ -75,7 +84,7 @@
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
                     <button type="button" class="btn btn-danger btn-ok">Delete</button>
-
+                </div>
                 </div>
             </div>
         </div>
