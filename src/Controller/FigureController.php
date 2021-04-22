@@ -46,8 +46,9 @@ class FigureController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($figure);
             $entityManager->flush();
+            $this->addFlash("success", "L'ajout a bien été effectué");
 
-            return $this->redirectToRoute('figure_show', ['id'=>$figure->getId()]);
+            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
         }
 
         return $this->render('figure/create.html.twig', [
@@ -78,8 +79,9 @@ class FigureController extends AbstractController
                 $figure->addFigureImage($fileName);
             }
             $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("success", "La modification a bien été effectuée");
 
-            return $this->redirectToRoute('figure_show', ['id'=>$figure->getId()]);
+            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
         }
 
         return $this->render('figure/edit.html.twig', [
@@ -95,6 +97,7 @@ class FigureController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($figure);
             $entityManager->flush();
+            $this->addFlash("success", "La suppression a bien été effectuée");
         }
 
         return $this->redirectToRoute('homepage');
