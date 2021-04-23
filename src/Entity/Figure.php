@@ -56,19 +56,11 @@ class Figure
     private $update_date;
 
     /**
-     * @ORM\Column(name="figure_image", type="string", length=255, nullable=true)
+     * @ORM\OneToMany(targetEntity=FigureImage::class, mappedBy="figure", orphanRemoval=true, cascade="persist")
      */
-    private $figureImage;
+    private $figureImages;
 
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $figureVideo;
 
-    /**
-     * @ORM\Column(type="array", nullable=true)
-     */
-    private $figureImages = [];
 
     public function __construct()
     {
@@ -76,7 +68,11 @@ class Figure
         $this->comments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->update_date = new \DateTime();
+        $this->figureImages = new ArrayCollection();
     }
+
+
+
 
     public function getId(): ?int
     {
@@ -175,56 +171,37 @@ class Figure
         return $this;
     }
 
-    public function getFigureImage(): ?string
-    {
-        return $this->figureImage;
-    }
-
-    public function setFigureImage(?string $figureImage): self
-    {
-        $this->figureImage = $figureImage;
-
-        return $this;
-    }
-
-    public function getFigureVideo(): ?string
-    {
-        return $this->figureVideo;
-    }
-
-    public function setFigureVideo(?string $figureVideo): self
-    {
-        $this->figureVideo = $figureVideo;
-
-        return $this;
-    }
-
-    public function getFigureImages(): ?array
+    /**
+     * @return Collection|FigureImage[]
+     */
+    public function getFigureImages(): Collection
     {
         return $this->figureImages;
     }
 
-    public function setFigureImages(?array $figureImages): self
+    public function addFigureImage(FigureImage $figureImage): self
     {
-        $this->figureImages = $figureImages;
-
-        return $this;
-    }
-
-    public function addFigureImage(?string $figureImage): self
-    {
-        $this->figureImages[] = $figureImage;
-        return $this;
-    }
-
-    public function removeImage(?string $figureImage): self
-    {
-        $key = array_search($figureImage, $this->figureImages, false);
-        if($key !== null){
-            unset($key, $this->figureImages);
+        if (!$this->figureImages->contains($figureImage)) {
+            $this->figureImages[] = $figureImage;
+            $figureImage->setFigure($this);
         }
+
         return $this;
     }
+
+    public function removeFigureImage(FigureImage $figureImage): self
+    {
+        if ($this->figureImages->removeElement($figureImage)) {
+            // set the owning side to null (unless already changed)
+            if ($figureImage->getFigure() === $this) {
+                $figureImage->setFigure(null);
+            }
+        }
+
+        return $this;
+    }
+
+
 
 
 }

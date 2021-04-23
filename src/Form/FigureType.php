@@ -8,9 +8,11 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
+use Symfony\Component\Validator\Constraints\All;
 use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Validator\Constraints\Image;
 
 class FigureType extends AbstractType
 
@@ -25,18 +27,11 @@ class FigureType extends AbstractType
                 'class'=> Category::class,
                 'choice_label'=>'title'
             ])
-            ->add('figureImages', FileType::class, [
+            ->add('files', FileType::class, [
                 'label' => 'Image de la figure',
                 'mapped' => false,
-                'constraints' => [
-                    new File([
-                        'maxSize' => '2048K',
-                        'mimeTypes' => [
-                            'image/jpeg',
-                            'image/png',
-                        ],
-                        'mimeTypesMessage' => 'Please upload a valid Image file',
-                    ])],
+                'multiple' => true,
+                'constraints' => new All([new Image()])
             ]);
     }
 

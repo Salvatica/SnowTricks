@@ -45,7 +45,7 @@
 
 
                                                  <a href="#deleteModal" role="button" class="btn"><i class="fas fa-trash-alt" data-toggle="modal"
-                                                                        data-target="#exampleModal"></i></a>
+                                                                        data-target="#deleteModal" data-href="{{ path('figure_delete', {'id': figure.id}) }}"></i></a>
 
                                     </span>
                                     </div>
@@ -83,7 +83,7 @@
 
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
 
-                    <button type="button" class="btn btn-danger btn-ok">Delete</button>
+                    <a type="button" href="" class="btn btn-danger btn-ok">Delete</a>
                 </div>
                 </div>
             </div>
@@ -96,10 +96,11 @@
 {% block custom_scripts %}
     <script type="text/javascript">
         $('#deleteModal').on('show.bs.modal', function (e) {
-            console.log("ici")
+            console.log(e.relatedTarget);
+
             $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
 
-            $('.debug-url').html('Delete URL: <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+            $('.debug-url').html('Delete URL:  <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
         });
     </script>
 {% endblock %}

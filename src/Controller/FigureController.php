@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Figure;
+use App\Entity\FigureImage;
 use App\Form\FigureType;
 use App\Repository\FigureRepository;
 use App\Service\FileUploader;
@@ -37,18 +38,14 @@ class FigureController extends AbstractController
 
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $photo = $form->get('figureImages')->getData();
-            if($photo){
-                $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
-                $fileName = $fileUploader->upload($photo);
-                $figure->addFigureImage($fileName);
-            }
+            $photos = $form->get('files')->getData();
+            $this->handleImages($photos, $figure);
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($figure);
             $entityManager->flush();
             $this->addFlash("success", "L'ajout a bien été effectué");
 
-            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
+            return $this->redirectToRoute('homepage');
         }
 
         return $this->render('figure/create.html.twig', [
@@ -72,12 +69,8 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $photo = $form->get('figureImages')->getData();
-            if($photo){
-                $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
-                $fileName = $fileUploader->upload($photo);
-                $figure->addFigureImage($fileName);
-            }
+            $photos = $form->get('files')->getData();
+            $this->handleImages($photos,$figure);
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "La modification a bien été effectuée");
 
@@ -101,6 +94,23 @@ class FigureController extends AbstractController
         }
 
         return $this->redirectToRoute('homepage');
+    }
+
+    /**
+     * @param $photos
+     * @param Figure $figure
+     */
+    private function handleImages($photos, $figure){
+        foreach($photos as $photo){
+            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
+            $fileName = $fileUploader->upload($photo);
+            $figureImage = new FigureImage;
+            $figureImage->setFileName($fileName);
+            /**
+             * @var Figure
+             */
+            $figure->addFigureImage($figureImage);
+        }
     }
 
 
