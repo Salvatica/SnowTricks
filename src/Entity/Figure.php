@@ -60,6 +60,11 @@ class Figure
      */
     private $figureImages;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FigureVideo::class, mappedBy="figure", orphanRemoval=true)
+     */
+    private $figureVideos;
+
 
 
     public function __construct()
@@ -69,6 +74,7 @@ class Figure
         $this->created_at = new \DateTime();
         $this->update_date = new \DateTime();
         $this->figureImages = new ArrayCollection();
+        $this->figureVideos = new ArrayCollection();
     }
 
 
@@ -201,6 +207,35 @@ class Figure
         return $this;
     }
 
+    /**
+     * @return Collection|FigureVideo[]
+     */
+    public function getFigureVideos(): Collection
+    {
+        return $this->figureVideos;
+    }
+
+    public function addFigureVideo(FigureVideo $figureVideo): self
+    {
+        if (!$this->figureVideos->contains($figureVideo)) {
+            $this->figureVideos[] = $figureVideo;
+            $figureVideo->setFigure($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFigureVideo(FigureVideo $figureVideo): self
+    {
+        if ($this->figureVideos->removeElement($figureVideo)) {
+            // set the owning side to null (unless already changed)
+            if ($figureVideo->getFigure() === $this) {
+                $figureVideo->setFigure(null);
+            }
+        }
+
+        return $this;
+    }
 
 
 

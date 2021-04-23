@@ -23,10 +23,11 @@ class FigureVideo
     private $fileName;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Figure::class)
+     * @ORM\ManyToOne(targetEntity=Figure::class, inversedBy="figureVideos")
      * @ORM\JoinColumn(nullable=false)
      */
     private $figure;
+
 
     public function  __construct()
     {
@@ -61,4 +62,6 @@ class FigureVideo
 
         return $this;
     }
+
+
 }

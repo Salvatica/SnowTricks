@@ -45,7 +45,7 @@ class FigureController extends AbstractController
             $entityManager->flush();
             $this->addFlash("success", "L'ajout a bien été effectué");
 
-            return $this->redirectToRoute('homepage');
+            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
         }
 
         return $this->render('figure/create.html.twig', [
@@ -69,8 +69,10 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+
             $photos = $form->get('files')->getData();
             $this->handleImages($photos,$figure);
+
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "La modification a bien été effectuée");
 
@@ -112,6 +114,8 @@ class FigureController extends AbstractController
             $figure->addFigureImage($figureImage);
         }
     }
+
+
 
 
 }
