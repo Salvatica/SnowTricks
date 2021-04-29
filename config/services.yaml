@@ -33,3 +33,5 @@ services:
     app.photo_uploader:
         class: App\Service\FileUploader
         arguments: ['%photo_directory%']
+    app.video_link_sanitizer:
+        class: App\Service\VideoLinkSanitizer

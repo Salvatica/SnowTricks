@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 /**
  * @ORM\Entity(repositoryClass=FigureRepository::class)
  * @UniqueEntity("name", message="Cette figure existe déjà")
+ * @ORM\HasLifecycleCallbacks()
  *
  */
 class Figure
@@ -61,7 +62,7 @@ class Figure
     private $figureImages;
 
     /**
-     * @ORM\OneToMany(targetEntity=FigureVideo::class, mappedBy="figure", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=FigureVideo::class, mappedBy="figure", orphanRemoval=true, cascade="persist")
      */
     private $figureVideos;
 
@@ -76,6 +77,7 @@ class Figure
         $this->figureImages = new ArrayCollection();
         $this->figureVideos = new ArrayCollection();
     }
+
 
 
 
@@ -235,6 +237,21 @@ class Figure
         }
 
         return $this;
+    }
+
+
+    /**
+     * @ORM\PreUpdate()
+     */
+    public function setUpdateDateValue(){
+        $this->setUpdateDate(new \DateTime());
+    }
+
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAtValue(){
+        $this->setCreatedAt(new \DateTime());
     }
 
 

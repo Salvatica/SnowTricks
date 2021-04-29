@@ -3,7 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\FigureVideoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+use JetBrains\PhpStorm\Pure;
 
 /**
  * @ORM\Entity(repositoryClass=FigureVideoRepository::class)
@@ -27,12 +29,6 @@ class FigureVideo
      * @ORM\JoinColumn(nullable=false)
      */
     private $figure;
-
-
-    public function  __construct()
-    {
-
-    }
 
     public function getId(): ?int
     {

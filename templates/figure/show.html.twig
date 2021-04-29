@@ -29,17 +29,19 @@
                 <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail" alt="...">
             </div>
             {% endfor %}
+            {% for video in figure.figureVideos %}
             <div class="col-md-2 photo-list">
                 <div class="embed-responsive embed-responsive-16by9">
-                    <iframe
-                            class="embed-responsive-item img-thumbnail"
-                            src="https://www.youtube.com/watch?v=M_BOfGX0aGs"
-                            frameborder="0"
-                            allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    <iframe width="560" height="315"
+                            src="{{ video.fileName }}"
+                            title="YouTube video player" frameborder="0"
+                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                             allowfullscreen>
+
                     </iframe>
                 </div>
             </div>
+            {% endfor %}
         </div>
     </div>
 

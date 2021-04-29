@@ -4,9 +4,11 @@ namespace App\Controller;
 
 use App\Entity\Figure;
 use App\Entity\FigureImage;
+use App\Entity\FigureVideo;
 use App\Form\FigureType;
 use App\Repository\FigureRepository;
 use App\Service\FileUploader;
+use App\Service\VideoLinkSanitizer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,11 +21,13 @@ use Symfony\Component\String\Slugger\SluggerInterface;
 class FigureController extends AbstractController
 {
     private $slugger;
+    private $videoLinkSanitizer;
 
 
     public function __construct(SluggerInterface $slugger)
     {
         $this->slugger = $slugger;
+        $this->videoLinkSanitizer = new VideoLinkSanitizer();
 
 
     }
@@ -32,14 +36,30 @@ class FigureController extends AbstractController
     public function new(Request $request): Response
     {
         $figure = new Figure();
+
         $form = $this->createForm(FigureType::class, $figure);
+
         $form->handleRequest($request);
 
 
-
         if ($form->isSubmitted() && $form->isValid()) {
+
+
+
+
+
+
             $photos = $form->get('files')->getData();
             $this->handleImages($photos, $figure);
+            $figureVideos = $form->get('figureVideos')->getData();
+            /**
+             * @Var FigureVideo $figureVideo
+             */
+            foreach ($figureVideos as $figureVideo){
+                $url = $figureVideo->getFileName();
+                $figureVideo->setFileName($this->videoLinkSanitizer->clean($url));
+                $figureVideo->setFigure($figure);
+            }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($figure);
             $entityManager->flush();
@@ -70,8 +90,18 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
+
             $photos = $form->get('files')->getData();
             $this->handleImages($photos,$figure);
+            $figureVideos = $form->get('figureVideos')->getData();
+            /**
+             * @Var FigureVideo $figureVideo
+             */
+            foreach ($figureVideos as $figureVideo){
+                $url = $figureVideo->getFileName();
+                $figureVideo->setFileName($this->videoLinkSanitizer->clean($url));
+                $figureVideo->setFigure($figure);
+            }
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "La modification a bien été effectuée");
@@ -115,7 +145,22 @@ class FigureController extends AbstractController
         }
     }
 
+    /**
+     * @param $videos
+     * @param Figure $figure
+     */
 
-
+    private function handleVideos($videos, $figure){
+        foreach($videos as $video){
+            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
+            $fileName = $fileUploader->upload($video);
+            $figureVideo = new FigureVideo;
+            $figureVideo->setFileName($fileName);
+            /**
+             * @var Figure
+             */
+            $figure->addFigureVideo($figureVideo);
+        }
+    }
 
 }

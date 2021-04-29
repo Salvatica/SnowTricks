@@ -4,8 +4,10 @@ namespace App\Form;
 
 use App\Entity\Category;
 use App\Entity\Figure;
+use App\Entity\FigureVideo;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\FormBuilderInterface;
 
@@ -27,14 +29,21 @@ class FigureType extends AbstractType
             ->add('description')
             -> add('category', EntityType::class,[
                 'class'=> Category::class,
-                'choice_label'=>'title'
+                'choice_label'=>'title',
+
             ])
 
             ->add('files', FileType::class, [
                 'label' => 'Image de la figure',
                 'mapped' => false,
                 'multiple' => true,
-                'constraints' => new All([new Image()])]);
+                'constraints' => new All([new Image()])])
+            ->add('figureVideos', CollectionType::class, [
+                'entry_type' => FigureVideoType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+            ]);
+
     }
 
 
@@ -43,6 +52,15 @@ class FigureType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Figure::class,
+
         ]);
     }
+    public function configureOptionsVideos(OptionsResolver $resolver)
+    {
+        $resolver->setDefaults([
+
+            'data_class' => FigureVideo::class,
+        ]);
+    }
+
 }
