@@ -3,14 +3,15 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  */
-class User
+class User implements UserInterface
 {
     /**
      * @ORM\Id
@@ -20,69 +21,44 @@ class User
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=180)
      */
-    private $name;
+    private mixed $name;
+
+    /**
+     * @ORM\Column(type="string", length=180, unique=true)
+     */
+    private ?string $email;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\Length(min="8", minMessage="votre mot de passe doit faire au moins 8 caractères")
      */
-    private $email;
+    private string $password;
+
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="json")
      */
-    private $password;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $role;
-
-    /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private $photo;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
-     */
-    private $comment;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Figure::class, mappedBy="user")
-     */
-    private $figure;
-
-
-
-
-    public function __construct()
-    {
-        $this->comment = new ArrayCollection();
-        $this->figure = new ArrayCollection();
-    }
-
-    public function __toString(): string
-    {
-        return $this->getName();
-    }
-
+    private array $roles = [];
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
+
+    /**
+     * @return mixed
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
-    public function setName(string $name): self
+    public function setName($name): ?self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -98,9 +74,47 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUsername(): string
     {
-        return $this->password;
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    public function addRole($role): self
+    {
+        $this->roles[] = $role;
+        return $this;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getPassword(): string
+    {
+        return (string) $this->password;
     }
 
     public function setPassword(string $password): self
@@ -110,88 +124,25 @@ class User
         return $this;
     }
 
-    public function getRole(): ?string
+
+
+    /**
+     * Returning a salt is only needed, if you are not using a modern
+     * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
     {
-        return $this->role;
-    }
-
-    public function setRole(string $role): self
-    {
-        $this->role = $role;
-
-        return $this;
-    }
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(string $photo): self
-    {
-        $this->photo = $photo;
-
-        return $this;
+        return null;
     }
 
     /**
-     * @return Collection|Comment[]
+     * @see UserInterface
      */
-    public function getComment(): Collection
+    public function eraseCredentials()
     {
-        return $this->comment;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
-
-    public function addComment(Comment $comment): self
-    {
-        if (!$this->comment->contains($comment)) {
-            $this->comment[] = $comment;
-            $comment->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeComment(Comment $comment): self
-    {
-        if ($this->comment->removeElement($comment)) {
-            // set the owning side to null (unless already changed)
-            if ($comment->getUser() === $this) {
-                $comment->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection|Figure[]
-     */
-    public function getFigure(): Collection
-    {
-        return $this->figure;
-    }
-
-    public function addFigure(Figure $figure): self
-    {
-        if (!$this->figure->contains($figure)) {
-            $this->figure[] = $figure;
-            $figure->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFigure(Figure $figure): self
-    {
-        if ($this->figure->removeElement($figure)) {
-            // set the owning side to null (unless already changed)
-            if ($figure->getUser() === $this) {
-                $figure->setUser(null);
-            }
-        }
-
-        return $this;
-    }
-
 }
