@@ -34,14 +34,17 @@ class FigureType extends AbstractType
             ])
 
             ->add('files', FileType::class, [
-                'label' => 'Image de la figure',
+                'label' => 'Images',
                 'mapped' => false,
+                'required' => false,
                 'multiple' => true,
                 'constraints' => new All([new Image()])])
             ->add('figureVideos', CollectionType::class, [
+                'by_reference' => false,
                 'entry_type' => FigureVideoType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true
             ]);
 
     }

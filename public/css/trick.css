@@ -91,4 +91,7 @@ footer p {
 {
   flex-flow: row-reverse;
 }
-
+#showMoreFigure
+{
+  display:none;
+}

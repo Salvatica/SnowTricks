@@ -25,16 +25,20 @@
 
 
             <ul class="figureVideos" data-prototype="{{ form_widget(formFigure.figureVideos.vars.prototype)|e('html_attr') }}">
-                {% for video in formFigure.figureVideos %}
-                    <li>{{ form_row(formFigure.fileName) }}</li>
+
+                {% for formVideo in formFigure.figureVideos %}
+
+                    <li>{{ form_row(formVideo.fileName)}}</li>
+                    <button class="btn btn-danger btn-sm" form="figureVideosForm">Delete</button>
                 {% endfor %}
+
             </ul>
-            <button type="button" class="add_item_link" data-collection-holder-class="figureVideos">Add a video</button>
+            <button type="button" class="btn btn-primary add_item_link mb-4" data-collection-holder-class="figureVideos">Add a video</button>
 
 
-    <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}
+    <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}</button>
 
-    </button>
+
     </div>
     </div>
     {{ form_end(formFigure) }}
@@ -47,6 +51,7 @@
 
     {% block custom_scripts %}
         <script>
+            //TODO gerer deleteButton
             function addFormToCollection($collectionHolderClass) {
                 // Get the ul that holds the collection of tags
                 var $collectionHolder = $('.' + $collectionHolderClass);

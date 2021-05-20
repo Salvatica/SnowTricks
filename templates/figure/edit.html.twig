@@ -26,8 +26,8 @@
                 <div class="card mb-4 box-shadow">
                 <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail" alt="...">
 
-        </div>
-</div>
+                </div>
+            </div>
 
                 <div class="position">
                     <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
@@ -42,42 +42,54 @@
 
         {% endfor %}
 
-            <iframe
-                    class="embed-responsive-item img-thumbnail"
-                    src="https://www.youtube.com/embed/M_BOfGX0aGs"
-                    frameborder="0"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
+            {% for video in figure.figureVideos %}
+                <div class="col-md-2 photo-list">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe width="560" height="315"
+                                src="{{ video.fileName }}"
+                                title="YouTube video player" frameborder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
 
-            </iframe>
+                        </iframe>
+                    </div>
+                </div>
+            {% endfor %}
 
             </div>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-sm-4 offset-sm-3">
 
+        <div class="col-sm-6 offset-sm-2">
             {{ form_start(form) }}
 
-            <h4>Nom</h4>
-            <div class="form-floating mb-4">
-                {{ form_widget(form.name) }}
-            </div>
 
-            <h4>Description</h4>
-            <div class="form-floating mb-4">
-                {{ form_widget(form.description) }}
-            </div>
+                {{ form_row(form.name) }}
 
-            <h4>Catégorie</h4>
+
+                {{ form_row(form.description) }}
+
+
             <div class="form-floating mb-4">
                 <div class="row">
 
                     <div class="col-sm-4">
-                        {{ form_widget(form.category) }}
+                        {{ form_row(form.category) }}
                     </div>
+
                 </div>
+
+                {{ form_row(form.files, {'attr': {'placeholder': "images"}}) }}
+
+                <div class="figureVideos" data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
+                    {% for formVideo in form.figureVideos %}
+                        <div class="figureVideo">{{ form_row(formVideo.fileName) }}</div>
+
+                    {% endfor %}
+                </div>
+                <button type="button" class="btn btn-primary add_item_link mb-4" data-collection-holder-class="figureVideos">Add a video</button>
 
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -91,7 +103,73 @@
 
         </div>
     </div>
+{% endblock %}
+{% block custom_scripts %}
+    <script>
+        //TODO gerer deleteButton
+        function addFormToCollection($collectionHolderClass) {
+            // Get the ul that holds the collection of tags
+            var $collectionHolder = $('.' + $collectionHolderClass);
 
+            // Get the data-prototype explained earlier
+            var prototype = $collectionHolder.data('prototype');
+
+            // get the new index
+            var index = $collectionHolder.data('index');
+
+            var newForm = prototype;
+            // You need this only if you didn't set 'label' => false in your tags field in TaskType
+            // Replace '__name__label__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            // newForm = newForm.replace(/__name__label__/g, index);
+
+            // Replace '__name__' in the prototype's HTML to
+            // instead be a number based on how many items we have
+            newForm = newForm.replace(/__name__/g, index);
+
+            // increase the index with one for the next item
+            $collectionHolder.data('index', index + 1);
+
+            // Display the form in the page in an li, before the "Add a tag" link li
+            var $newFormLi = $('<div class="figureVideo"></div>').append(newForm);
+            // Add the new form at the end of the list
+            $collectionHolder.append($newFormLi)
+            addFormDeleteLink($newFormLi);
+        }
+
+
+        function addFormDeleteLink($entry){
+            var $removeFormButton = $('<button type="button" class="float-right">Supprimer</button>');
+            $entry.append($removeFormButton);
+
+            $removeFormButton.on('click', function(e) {
+                // remove the li for the tag form
+                $entry.remove();
+            });
+        }
+
+        jQuery(document).ready(function() {
+            // Get the ul that holds the collection of tags
+            var $collectionHolder = $('div.figureVideos');
+
+            // add a delete link to all of the existing tag form li elements
+            $collectionHolder.find('div.figureVideo').each(function() {
+                addFormDeleteLink($(this));
+            });
+
+
+            // count the current form inputs we have (e.g. 2), use that as the new
+            // index when inserting a new item (e.g. 2)
+            $collectionHolder.data('index', $collectionHolder.find('div.figureVideo').length);
+
+            $('body').on('click', '.add_item_link', function(e) {
+                var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
+                // add a new tag form (see next code block)
+                addFormToCollection($collectionHolderClass);
+            })
+        });
+
+    </script>
 
 
 {% endblock %}

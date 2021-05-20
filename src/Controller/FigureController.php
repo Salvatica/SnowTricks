@@ -6,66 +6,36 @@ use App\Entity\Figure;
 use App\Entity\FigureImage;
 use App\Entity\FigureVideo;
 use App\Form\FigureType;
-use App\Repository\FigureRepository;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\String\Slugger\SluggerInterface;
 
 
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
-    private $slugger;
-    private $videoLinkSanitizer;
-
-
-    public function __construct(SluggerInterface $slugger)
+    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer)
     {
-        $this->slugger = $slugger;
-        $this->videoLinkSanitizer = new VideoLinkSanitizer();
-
-
     }
 
     #[Route('/new', name: 'figure_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $figure = new Figure();
-
         $form = $this->createForm(FigureType::class, $figure);
-
         $form->handleRequest($request);
 
-
         if ($form->isSubmitted() && $form->isValid()) {
-
-
-
-
-
-
-            $photos = $form->get('files')->getData();
-            $this->handleImages($photos, $figure);
-            $figureVideos = $form->get('figureVideos')->getData();
-            /**
-             * @Var FigureVideo $figureVideo
-             */
-            foreach ($figureVideos as $figureVideo){
-                $url = $figureVideo->getFileName();
-                $figureVideo->setFileName($this->videoLinkSanitizer->clean($url));
-                $figureVideo->setFigure($figure);
-            }
-            $entityManager = $this->getDoctrine()->getManager();
+            $this->handleImages($form->get('files')->getData(), $figure);
             $entityManager->persist($figure);
             $entityManager->flush();
             $this->addFlash("success", "L'ajout a bien été effectué");
 
-            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
+            return $this->redirectToRoute('homepage', ['id' => $figure->getId()]);
         }
 
         return $this->render('figure/create.html.twig', [
@@ -92,12 +62,12 @@ class FigureController extends AbstractController
 
 
             $photos = $form->get('files')->getData();
-            $this->handleImages($photos,$figure);
+            $this->handleImages($photos, $figure);
             $figureVideos = $form->get('figureVideos')->getData();
             /**
              * @Var FigureVideo $figureVideo
              */
-            foreach ($figureVideos as $figureVideo){
+            foreach ($figureVideos as $figureVideo) {
                 $url = $figureVideo->getFileName();
                 $figureVideo->setFileName($this->videoLinkSanitizer->clean($url));
                 $figureVideo->setFigure($figure);
@@ -106,7 +76,7 @@ class FigureController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "La modification a bien été effectuée");
 
-            return $this->redirectToRoute('homepage', ['id'=>$figure->getId()]);
+            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
 
         return $this->render('figure/edit.html.twig', [
@@ -115,10 +85,10 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'figure_delete', methods: ['POST'])]
+    #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET','POST'])]
     public function delete(Request $request, Figure $figure): Response
     {
-        if ($this->isCsrfTokenValid('delete'.$figure->getId(), $request->request->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->query->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($figure);
             $entityManager->flush();
@@ -132,8 +102,9 @@ class FigureController extends AbstractController
      * @param $photos
      * @param Figure $figure
      */
-    private function handleImages($photos, $figure){
-        foreach($photos as $photo){
+    private function handleImages($photos, $figure)
+    {
+        foreach ($photos as $photo) {
             $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
             $fileName = $fileUploader->upload($photo);
             $figureImage = new FigureImage;
@@ -149,17 +120,10 @@ class FigureController extends AbstractController
      * @param $videos
      * @param Figure $figure
      */
-
-    private function handleVideos($videos, $figure){
-        foreach($videos as $video){
-            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
-            $fileName = $fileUploader->upload($video);
-            $figureVideo = new FigureVideo;
-            $figureVideo->setFileName($fileName);
-            /**
-             * @var Figure
-             */
-            $figure->addFigureVideo($figureVideo);
+    private function handleVideos($videos, $figure)
+    {
+        foreach ($videos as $video) {
+            $figure->addFigureVideo($video);
         }
     }
 

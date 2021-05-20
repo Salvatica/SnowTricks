@@ -32,7 +32,7 @@
            value="{{ csrf_token('authenticate') }}">
     <button type="submit" class="btn btn-primary mb-4">connexion</button>
 
-    <p> Pas encore inscrit ? alors inscrivez-vous en <a href="">cliquant ici </a></p>
+    <p> Pas encore inscrit ? alors inscrivez-vous en <a href="{{ path('security_registration') }}">cliquant ici </a></p>
 </form>
 </div>
 </div>

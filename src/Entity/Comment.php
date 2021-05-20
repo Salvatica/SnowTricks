@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\CommentRepository;
 use Doctrine\ORM\Mapping as ORM;
 
+
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
  */
@@ -20,22 +21,22 @@ class Comment
     /**
      * @ORM\Column(type="text")
      */
-    private $content;
+    private ?string $content;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $date;
+    private ?\DateTimeInterface $date;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comment")
      */
-    private $user;
+    private ?User $user;
 
     /**
      * @ORM\ManyToOne(targetEntity=Figure::class, inversedBy="comment")
      */
-    private $figure;
+    private ?Figure $figure;
 
     public function __construct()
     {
@@ -94,4 +95,6 @@ class Comment
 
         return $this;
     }
+
+
 }

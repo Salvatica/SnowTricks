@@ -3,9 +3,9 @@
 namespace App\Entity;
 
 use App\Repository\FigureVideoRepository;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
-use JetBrains\PhpStorm\Pure;
+use App\Validator\FigureVideo as FigureVideoConstraint;
+
 
 /**
  * @ORM\Entity(repositoryClass=FigureVideoRepository::class)
@@ -19,10 +19,12 @@ class FigureVideo
      */
     private $id;
 
+
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $fileName;
+    #[FigureVideoConstraint()]
+    private ?string $fileName;
 
     /**
      * @ORM\ManyToOne(targetEntity=Figure::class, inversedBy="figureVideos")
