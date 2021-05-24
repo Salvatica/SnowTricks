@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=CommentRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Comment
 {
@@ -15,6 +16,7 @@ class Comment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
+
      */
     private $id;
 
@@ -40,7 +42,6 @@ class Comment
 
     public function __construct()
     {
-        $this->date = new \DateTime();
     }
 
     public function getId(): ?int
@@ -95,6 +96,11 @@ class Comment
 
         return $this;
     }
-
+    /**
+     * @ORM\PrePersist()
+     */
+    public function setCreatedAtValue(){
+        $this->setDate(new \DateTime());
+    }
 
 }

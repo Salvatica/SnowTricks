@@ -68,27 +68,33 @@
             </div>
         </article>
 
+
+
+
+
+
+
     <HR align=center size=50 width="50%">
 
         <section id="commentaires">
             <div class="container">
-
-                    <form method="post" id="commentform" class="comment-form">
+                {% if app.user %}
+                        {{ form_start(commentForm) }}
                         <div class="row">
-                            <div class="col-sm-6 offset-sm-2">
-                                <textarea class="form-control" placeholder="Laissez votre commentaire ici" id="floatingTextarea"></textarea>
-                                <label for="floatingTextarea"></label>
+                            <div class="col-sm-6 offset-sm-2"{{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+
 
                             </div>
                             <div class="col-sm-2">
                                 <input name="submit" type="submit" id="submit" class="submit btn btn-block btn-primary my-2"
                                        value="Poster"/>
-
                             </div>
-                        </div>
-                    </form>
+                {{ form_end(commentForm) }}
                 </div>
-
+                {% else %}
+            <h6>Vous ne pouvez pas commenter si vous n'êtes pas connecté</h6>
+            <a href="{{ path('app_login') }}" class="btn btn-primary">Connexion</a>
+            {% endif %}
         </section>
 
     </div>
@@ -97,12 +103,14 @@
 
     <div class="comment">
     {% for comment in figure.comments %}
+
         <div class="row">
             <div class="col-3">
-                {{ comment.user }}
+                {{ comment.user }}(<small>{{ comment.date | format_datetime(locale='fr') }}</small>
                 <img class="align-self-start mr-3 " width="60px" height="60px" src="https://robohash.org/YOUR-TEXT.png"
                      alt="Generic placeholder image">
             </div>
+
             <div class="media">
                 <div class="media-body">
                     {{ comment.content | raw }}
@@ -110,16 +118,15 @@
             </div>
         </div>
 
-    {% endfor %}
-
+        {% endfor %}
 
 </div>
     <a class="btn btn-secondary btn-sm "  href="{{ path('homepage') }}">Back</a>
 
 
     </section>
-    </div>
 
+    </div>
 
 
 

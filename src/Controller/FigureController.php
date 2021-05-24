@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\Comment;
 use App\Entity\Figure;
 use App\Entity\FigureImage;
 use App\Entity\FigureVideo;
+use App\Form\CommentType;
 use App\Form\FigureType;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
@@ -45,9 +47,27 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'figure_show', methods: ['GET'])]
-    public function show(Figure $figure): Response
+    #[Route('/{id}', name: 'figure_show', methods: ['GET', 'POST'])]
+    public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure): Response
     {
+        $comment = new Comment();
+        $user = $this->getUser();
+        $comment->setUser($user);
+
+        $form = $this->createForm(CommentType::class, $comment);
+        $form ->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()) {
+                $comment->setFigure($figure);
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+            }
+        return $this -> render ('figure/show.html.twig',[
+            'figure'=>$figure,
+            'commentForm'=>$form->createView()
+        ]);
+
         return $this->render('figure/show.html.twig', [
             'figure' => $figure,
         ]);
@@ -169,6 +189,7 @@ class FigureController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()) );
+        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
+
 }
