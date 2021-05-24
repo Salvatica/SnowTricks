@@ -51,22 +51,14 @@ class User implements UserInterface
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
      */
-    private $comment;
+    private $comments;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Figure::class, mappedBy="user")
-     */
-    private $figure;
 
-    /**
-     * @ORM\OneToMany(targetEntity=Figure::class, mappedBy="user")
-     */
-    private $figures;
 
 
     public function __construct()
     {
-        $this->comment = new ArrayCollection();
+        $this->comments = new ArrayCollection();
         $this->figure = new ArrayCollection();
         $this->figures = new ArrayCollection();
     }
@@ -164,15 +156,15 @@ class User implements UserInterface
     /**
      * @return Collection|Comment[]
      */
-    public function getComment(): Collection
+    public function getComments(): Collection
     {
-        return $this->comment;
+        return $this->comments;
     }
 
     public function addComment(Comment $comment): self
     {
-        if (!$this->comment->contains($comment)) {
-            $this->comment[] = $comment;
+        if (!$this->comments->contains($comment)) {
+            $this->comments[] = $comment;
             $comment->setUser($this);
         }
 
@@ -181,7 +173,7 @@ class User implements UserInterface
 
     public function removeComment(Comment $comment): self
     {
-        if ($this->comment->removeElement($comment)) {
+        if ($this->comments->removeElement($comment)) {
             // set the owning side to null (unless already changed)
             if ($comment->getUser() === $this) {
                 $comment->setUser(null);
@@ -191,35 +183,7 @@ class User implements UserInterface
         return $this;
     }
 
-    /**
-     * @return Collection|Figure[]
-     */
-    public function getFigure(): Collection
-    {
-        return $this->figure;
-    }
 
-    public function addFigure(Figure $figure): self
-    {
-        if (!$this->figure->contains($figure)) {
-            $this->figure[] = $figure;
-            $figure->setUser($this);
-        }
-
-        return $this;
-    }
-
-    public function removeFigure(Figure $figure): self
-    {
-        if ($this->figure->removeElement($figure)) {
-            // set the owning side to null (unless already changed)
-            if ($figure->getUser() === $this) {
-                $figure->setUser(null);
-            }
-        }
-
-        return $this;
-    }
 
 
     /**
@@ -244,11 +208,5 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection|Figure[]
-     */
-    public function getFigures(): Collection
-    {
-        return $this->figures;
-    }
+
 }

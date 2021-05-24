@@ -18,40 +18,46 @@
         </div>
 
     </div>
-    <div class="container-fluid">
-
-        <div class="row mb-4">
+    <div class="container-fluid">  {#  insert image   #}
+        <div class="row">
             {% for photo in figure.figureImages %}
-            <div class="col-md-2 photo-list embed-responsive-16by9">
-                <div class="card mb-4 box-shadow">
-                <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail" alt="...">
-
-                </div>
-            </div>
+            <div class="col-md-2 photo-list embed-responsive-16by9"  >
+                <div class="card mb-4 box-shadow" >
+                <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail"  alt="...">
 
                 <div class="position">
                     <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
                         <i class="far fa-edit"></i>
                     </a>
-
-                    <button type="button" class="btn" data-toggle="modal" data-target="#deleteModal">
-                        <i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i>
-                    </button>
+                    <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} )}}"  >
+                        <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                    </a>
 
                 </div>
-
+            </div>
+            </div>
         {% endfor %}
 
-            {% for video in figure.figureVideos %}
-                <div class="col-md-2 photo-list">
-                    <div class="embed-responsive embed-responsive-16by9">
-                        <iframe width="560" height="315"
+            {% for video in figure.figureVideos %} {#  insert video #}
+                <div class="col-md-2 video-list embed-responsive-16by9">
+                    <div class="card mb-4 box-shadow">
+
+                        <iframe
                                 src="{{ video.fileName }}"
                                 title="YouTube video player" frameborder="0"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen>
-
                         </iframe>
+                        <div class="position">
+                            <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+                                <i class="far fa-edit"></i>
+                            </a>
+                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} )}}"   >
+                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                            </a>
+
+                        </div>
+
                     </div>
                 </div>
             {% endfor %}
@@ -60,7 +66,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row"> {# form for modify text, image and video #}
 
         <div class="col-sm-6 offset-sm-2">
             {{ form_start(form) }}
@@ -83,12 +89,12 @@
 
                 {{ form_row(form.files, {'attr': {'placeholder': "images"}}) }}
 
-                <div class="figureVideos" data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
+               <div class="figureVideos" data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
                     {% for formVideo in form.figureVideos %}
                         <div class="figureVideo">{{ form_row(formVideo.fileName) }}</div>
 
                     {% endfor %}
-                </div>
+              </div>
                 <button type="button" class="btn btn-primary add_item_link mb-4" data-collection-holder-class="figureVideos">Add a video</button>
 
             </div>
@@ -106,7 +112,7 @@
 {% endblock %}
 {% block custom_scripts %}
     <script>
-        //TODO gerer deleteButton
+        //  deleteButton
         function addFormToCollection($collectionHolderClass) {
             // Get the ul that holds the collection of tags
             var $collectionHolder = $('.' + $collectionHolderClass);

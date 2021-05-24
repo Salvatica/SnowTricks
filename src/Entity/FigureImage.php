@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\FigureImageRepository;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -15,7 +16,7 @@ class FigureImage
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
@@ -27,6 +28,7 @@ class FigureImage
      * @ORM\JoinColumn(nullable=false)
      */
     private $figure;
+
 
 
     public function __toString(): string
@@ -63,5 +65,6 @@ class FigureImage
 
         return $this;
     }
+    
 
 }

@@ -26,12 +26,11 @@
         {% endfor %}
 
         <!-- LISTE FIGURES -->
-        <div class="trick py-5 bg-light" id="trick">
+        <div class="container-fluid trick py-5 bg-light" id="trick">
 
-            <div class="container-fluid all-figures">
+            <div class="row all-figures">
                 {% for figure in figures %}
-                    {% if loop.index0 % 4 == 0 %}<div class="row row-figure">{% endif %}
-                    <div class="col-md-3"><!-- FIGURE -->
+                    <div class="col-md-3 one-figure"><!-- FIGURE -->
                         <div class="card mb-4 box-shadow">
                             <img class="card-img-top" src="{{ asset('images/exemple.jpeg') }}" alt="Card image cap">
 
@@ -53,8 +52,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div><!-- END FIGURE -->
-                    {% if loop.index0 % 4 == 3 or loop.last %}  </div>{% endif %} <!-- END ROW FIGURE-->
+                    </div>
                 {% endfor %}
             </div> <!-- END CONTAINER FIGURE-->
         </div>
@@ -105,33 +103,5 @@
 {% endblock %}
 
 {% block custom_scripts %}
-    <script type="text/javascript">
-        $('#deleteModal').on('show.bs.modal', function (e) {
-            console.log(e.relatedTarget);
-
-            $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-            $('.debug-url').html('Delete URL:  <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
-        });
-        $('.row-figure').hide();
-
-        function showMoreFigure() {
-            $('.row-figure:hidden:first').fadeIn();
-        }
-        showMoreFigure();
-        showMoreFigure();
-        showMoreFigure();
-
-        $(function ()
-
-        {
-            $("#loadMore").on('click', function (e) {
-                e.preventDefault();
-                showMoreFigure()
-                $(this).toggle(showMoreFigure)
-            });
-        });
-
-
-    </script>
+    <script type="text/javascript" src="{{ asset('js/homePage.js') }}"></script>
 {% endblock %}

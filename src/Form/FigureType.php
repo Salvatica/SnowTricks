@@ -26,7 +26,8 @@ class FigureType extends AbstractType
     {
         $builder
             ->add('name', TextType::class)
-            ->add('description')
+            ->add('description', TextType::class, [
+            ])
             -> add('category', EntityType::class,[
                 'class'=> Category::class,
                 'choice_label'=>'title',
@@ -40,6 +41,7 @@ class FigureType extends AbstractType
                 'multiple' => true,
                 'constraints' => new All([new Image()])])
             ->add('figureVideos', CollectionType::class, [
+                'label' => false,
                 'by_reference' => false,
                 'entry_type' => FigureVideoType::class,
                 'entry_options' => ['label' => false],

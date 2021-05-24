@@ -29,12 +29,12 @@ class Comment
     private ?\DateTimeInterface $date;
 
     /**
-     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comment")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="comments")
      */
     private ?User $user;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Figure::class, inversedBy="comment")
+     * @ORM\ManyToOne(targetEntity=Figure::class, inversedBy="comments")
      */
     private ?Figure $figure;
 

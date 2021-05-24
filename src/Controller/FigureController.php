@@ -9,6 +9,7 @@ use App\Form\FigureType;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
 use Doctrine\ORM\EntityManagerInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -117,6 +118,28 @@ class FigureController extends AbstractController
     }
 
     /**
+     * @param Request $request
+     * @param Figure $figure
+     * @param FigureImage $figureImage
+     * @return Response
+     *
+     * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
+     * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
+     */
+    #[Route('/{figureId}/removeFigureImage/{imageId}', name: 'image_delete', methods: ['GET'])]
+    public function deleteImage(Request $request, Figure $figure, FigureImage $figureImage): Response
+    {
+            $entityManager = $this->getDoctrine()->getManager();
+            dump($figureImage);
+            $figure->removeFigureImage($figureImage);
+            $entityManager->persist($figure);
+            $entityManager->flush();
+
+        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()) );
+    }
+
+
+    /**
      * @param $videos
      * @param Figure $figure
      */
@@ -127,4 +150,25 @@ class FigureController extends AbstractController
         }
     }
 
+    /**
+     * @param Request $request
+     * @param Figure $figure
+     * @param FigureVideo $figureVideo
+     * @return Response
+     *
+     * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
+     * @ParamConverter("figureVideo", options={"mapping": {"videoId": "id"}})
+     */
+    #[Route('/{figureId}/removeFigureVideo/{videoId}', name: 'video_delete', methods: ['GET'])]
+    public function deleteVideo(Request $request, Figure $figure, FigureVideo $figureVideo): Response
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        dump($figureVideo);
+        $figure->removeFigureVideo($figureVideo);
+        $entityManager->persist($figure);
+        $entityManager->flush();
+
+
+        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()) );
+    }
 }
