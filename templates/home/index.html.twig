@@ -15,16 +15,15 @@
                                 class="fas fa-arrow-circle-down"></i></a></div>
             </div>
         </div><!-- END JUMBOTRON -->
-
         {% for message in app.flashes('success') %}
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ message }}
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-        {% endfor %}
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
 
+        {% endfor %}
         <!-- LISTE FIGURES -->
         <div class="container-fluid trick py-5 bg-light" id="trick">
 

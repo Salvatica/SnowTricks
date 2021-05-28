@@ -11,6 +11,8 @@ use App\Form\FigureType;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
 use Doctrine\ORM\EntityManagerInterface;
+use phpDocumentor\Reflection\Types\Mixed_;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -25,6 +27,13 @@ class FigureController extends AbstractController
     {
     }
 
+
+    /**
+     * @param Request $request
+     * @param EntityManagerInterface $entityManager
+     * @return Response
+     * @IsGranted("ROLE_USER")
+     */
     #[Route('/new', name: 'figure_new', methods: ['GET', 'POST'])]
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -68,9 +77,7 @@ class FigureController extends AbstractController
             'commentForm'=>$form->createView()
         ]);
 
-        return $this->render('figure/show.html.twig', [
-            'figure' => $figure,
-        ]);
+
     }
 
     #[Route('/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
@@ -192,4 +199,24 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
 
+    /**
+     * @param Request $request
+     * @param Figure $figure
+     * @param Comment $comment
+     * @return Response
+     * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
+     * @ParamConverter("comment", options={"mapping": {"commentId": "id"}})
+     */
+    #[Route('/{figureId}/commentRemove/{commentId}', name: 'comment_delete', methods: ['GET','POST'])]
+    public function removeComment(Request $request, Figure $figure, Comment $comment): Response
+    {
+            $this->denyAccessUnlessGranted('comment_delete', $comment);
+            $entityManager = $this->getDoctrine()->getManager();
+            $figure->removeComment($comment);
+            $entityManager->flush();
+            $this->addFlash("success", "La suppression a bien été effectuée");
+
+
+        return $this->redirectToRoute('figure_show',['id' => $figure->getId()]);
+    }
 }

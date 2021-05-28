@@ -4,43 +4,44 @@
 
 {% block body %}
 
-    <div>
-        <div class="position-absolute">
-            <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
-                <i class="far fa-edit"></i>
-            </a>
+
+    <div class="position-absolute">
+        <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+            <i class="far fa-edit"></i>
+        </a>
 
         {% embed "figure/_delete_form.html.twig" %}
             {% block bouton %}
-                <button class="btn"><i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i></button>
+                <button class="btn"><i class="fas fa-trash-alt" data-toggle="modal" data-target="#exampleModal"></i>
+                </button>
             {% endblock %}
 
         {% endembed %}
 
-        </div>
-
-        <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
     </div>
+
+    <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
+
     <div class="container-fluid">
 
         <div class="row mb-4">
             {% for photo in figure.figureImages %}
-            <div class="col-md-2 photo-list embed-responsive-16by9">
-                <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail" alt="...">
-            </div>
+                <div class="col-md-2 photo-list embed-responsive-16by9">
+                    <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
+                </div>
             {% endfor %}
             {% for video in figure.figureVideos %}
-            <div class="col-md-2 photo-list">
-                <div class="embed-responsive embed-responsive-16by9">
-                    <iframe width="560" height="315"
-                            src="{{ video.fileName }}"
-                            title="Video player" frameborder="0"
-                            allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowfullscreen>
+                <div class="col-md-2 photo-list">
+                    <div class="embed-responsive embed-responsive-16by9">
+                        <iframe width="560" height="315"
+                                src="{{ video.fileName }}"
+                                title="Video player" frameborder="0"
+                                allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
 
-                    </iframe>
+                        </iframe>
+                    </div>
                 </div>
-            </div>
             {% endfor %}
         </div>
     </div>
@@ -69,66 +70,72 @@
         </article>
 
 
+        <HR align=center size=50 width="50%">
 
-
-
-
-
-    <HR align=center size=50 width="50%">
-
+        {# gestion des commentaires #}
         <section id="commentaires">
-            <div class="container">
-                {% if app.user %}
-                        {{ form_start(commentForm) }}
-                        <div class="row">
-                            <div class="col-sm-6 offset-sm-2"{{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
 
 
-                            </div>
-                            <div class="col-sm-2">
-                                <input name="submit" type="submit" id="submit" class="submit btn btn-block btn-primary my-2"
-                                       value="Poster"/>
-                            </div>
-                {{ form_end(commentForm) }}
+            {% if app.user %}
+                {{ form_start(commentForm) }}
+                <div class="row">
+                    <div class="col-sm-6 offset-sm-2"{{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
                 </div>
-                {% else %}
-            <h6>Vous ne pouvez pas commenter si vous n'êtes pas connecté</h6>
-            <a href="{{ path('app_login') }}" class="btn btn-primary">Connexion</a>
+                <div class="col-sm-2 offset-sm-6">
+                    <input name="submit" type="submit" id="submit" class="submit btn btn-block btn-primary my-2"
+                           value="Poster"/>
+
+                </div>
+
+                {{ form_end(commentForm) }}
+
+            {% else %}
+
+                <h6>Vous ne pouvez pas commenter si vous n'êtes pas connecté</h6>
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Connexion</a>
             {% endif %}
+
         </section>
 
-    </div>
+        <HR align=center size=50 width="50%">
 
-    <HR align=center size=50 width="50%">
+        <div class="comment">
+            {% for comment in figure.comments %}
+                <div class="row">
+                    <div class="col-sm-4 offset-sm-3">
+                        <div class="card bg-light">
+                            <div class="card-body my-4">
+                                <div class="d-flex justify-content-start">
+                                    <img src="https://robohash.org/YOUR-TEXT.png" height="50px" width="50px"
+                                         alt="Generic placeholder image" class="rounded-circle border border-dark"/>
+                                </div>
 
-    <div class="comment">
-    {% for comment in figure.comments %}
+                                <div class="d-flex justify-content-start">
+                                    {{ comment.user }} </div>
+                                <hr>
+                                {{ comment.content | raw }}
+                                <hr>
+                                <div class="d-flex align-items-end flex-column">
+                                    posté le <small>{{ comment.date | format_datetime(locale='fr') }} </small>
 
-        <div class="row">
-            <div class="col-3">
-                {{ comment.user }}(<small>{{ comment.date | format_datetime(locale='fr') }}</small>
-                <img class="align-self-start mr-3 " width="60px" height="60px" src="https://robohash.org/YOUR-TEXT.png"
-                     alt="Generic placeholder image">
-            </div>
+                                </div>
+                                    {% if is_granted("comment_delete", comment) %}
+                                    <a href="{{ path('comment_delete', {'commentId': comment.id, 'figureId': figure.id}) }}">
+                                        <button class="btn btn-danger btn-sm">Delete</button>
+                                    </a>
+                                    {% endif %}
 
-            <div class="media">
-                <div class="media-body">
-                    {{ comment.content | raw }}
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
-            </div>
+            {% endfor %}
+
         </div>
-
-        {% endfor %}
-
-</div>
-    <a class="btn btn-secondary btn-sm "  href="{{ path('homepage') }}">Back</a>
-
-
-    </section>
-
     </div>
-
-
+    </div>
+    <a class="btn btn-secondary btn-sm " href="{{ path('homepage') }}">Back</a>
 
 
 
