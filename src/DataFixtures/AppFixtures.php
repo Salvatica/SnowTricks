@@ -23,7 +23,7 @@ class AppFixtures extends Fixture
 
         for($i = 0; $i < 10 ; $i++){
             $figure = new Figure();
-            $figure->setDescription("Ma descriotion ".$i) ;
+            $figure->setDescription("Ma description ".$i) ;
             $figure->setName("Montagne ".$i) ;
             $figure->setCategory($category);
 

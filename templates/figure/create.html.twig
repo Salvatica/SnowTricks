@@ -4,12 +4,11 @@
 {% block title %}New Figure{% endblock %}
 
 {% block body %}
-
+{% if app.user %}
     <h2>Création d'une figure </h2>
 
     <a href="{{ path('figure_new' ) }}"></a>
-
-
+{% endif %}
 
     {{ form_start(formFigure) }}
     <div class="row">

@@ -19,9 +19,6 @@
 	margin-top:22px;
 }
 
-.active {
-  color: red !important;
-}
 a { color: inherit; }
 
 .bg-dark.navbar-dark .navbar-nav .active>.nav-link,
@@ -108,3 +105,29 @@ footer p {
   flex-flow: row-reverse;
 }
 
+.rounded-circle {
+  border-radius: 50% !important;
+}
+
+.rounded {
+  border-radius: 0.25rem !important;
+}
+
+.rounded-pill {
+  border-radius: 50rem !important;
+}
+
+.rounded-top {
+  border-top-left-radius: 0.25rem !important;
+  border-top-right-radius: 0.25rem !important;
+}
+
+.rounded-end {
+  border-top-right-radius: 0.25rem !important;
+  border-bottom-right-radius: 0.25rem !important;
+}
+
+.rounded-bottom {
+  border-bottom-right-radius: 0.25rem !important;
+  border-bottom-left-radius: 0.25rem !important;
+}

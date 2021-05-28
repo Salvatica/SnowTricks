@@ -28,6 +28,7 @@
                 <div class="position">
                     <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
                         <i class="far fa-edit"></i>
+
                     </a>
                     <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} )}}"  >
                         <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
@@ -51,6 +52,7 @@
                         <div class="position">
                             <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
                                 <i class="far fa-edit"></i>
+
                             </a>
                             <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} )}}"   >
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
