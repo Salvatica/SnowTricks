@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use App\Repository\FigureVideoRepository;
 use Doctrine\ORM\Mapping as ORM;
-use App\Validator\FigureVideo as FigureVideoConstraint;
+use App\Validator\FigureVideoConstraint as FigureVideoConstraint;
 
 
 /**

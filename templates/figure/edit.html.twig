@@ -26,7 +26,7 @@
                 <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail"  alt="...">
 
                 <div class="position">
-                    <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+                    <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}" class="float-right">
                         <i class="far fa-edit"></i>
 
                     </a>
@@ -50,7 +50,7 @@
                                 allowfullscreen>
                         </iframe>
                         <div class="position">
-                            <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+                            <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}" class="float-right">
                                 <i class="far fa-edit"></i>
 
                             </a>
@@ -107,9 +107,9 @@
             </div>
             {{ form_end(form) }}
 
-
-
         </div>
+
+
     </div>
 {% endblock %}
 {% block custom_scripts %}

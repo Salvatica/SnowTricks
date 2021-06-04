@@ -9,6 +9,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints\Valid;
 
+
 /**
  * @ORM\Entity(repositoryClass=FigureRepository::class)
  * @UniqueEntity("name", message="Cette figure existe déjà")
@@ -28,6 +29,12 @@ class Figure
      * @ORM\Column(type="string", length=255)
      */
     private $name;
+
+    /**
+     * @ORM\Column(type="string", length=255, unique=true)
+     */
+    private $slug;
+
 
     /**
      * @ORM\Column(type="text")
@@ -102,6 +109,23 @@ class Figure
 
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getSlug()
+    {
+        return $this->slug;
+    }
+
+    /**
+     * @param mixed $slug
+     */
+    public function setSlug($slug): void
+    {
+        $this->slug = $slug;
+    }
+
 
     public function getDescription(): ?string
     {

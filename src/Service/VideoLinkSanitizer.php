@@ -13,7 +13,14 @@ class VideoLinkSanitizer
         // extaire une url dans la chaine de caractere envoyée
 
         preg_match('#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#', $input, $matches);
-        $url = $matches[0];
+
+        dump($matches);
+        if(empty($matches)){
+            return $input;
+        }
+        else{
+            $url = $matches[0];
+        }
 
         $domainName = parse_url($url, PHP_URL_HOST);
         if (str_contains($domainName, 'youtu.be') ){

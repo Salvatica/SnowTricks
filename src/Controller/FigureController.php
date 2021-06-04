@@ -7,7 +7,9 @@ use App\Entity\Figure;
 use App\Entity\FigureImage;
 use App\Entity\FigureVideo;
 use App\Form\CommentType;
+use App\Form\FigurePhotoType;
 use App\Form\FigureType;
+use App\Form\FigureVideoType;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -47,7 +49,7 @@ class FigureController extends AbstractController
             $entityManager->flush();
             $this->addFlash("success", "L'ajout a bien été effectué");
 
-            return $this->redirectToRoute('homepage', ['id' => $figure->getId()]);
+            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
 
         return $this->render('figure/create.html.twig', [
@@ -56,7 +58,7 @@ class FigureController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'figure_show', methods: ['GET', 'POST'])]
+    #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure): Response
     {
         $comment = new Comment();
@@ -70,15 +72,15 @@ class FigureController extends AbstractController
                 $comment->setFigure($figure);
                 $entityManager->persist($comment);
                 $entityManager->flush();
-                return $this->redirectToRoute('figure_show', ['id' => $figure->getId()]);
+                return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
             }
         return $this -> render ('figure/show.html.twig',[
             'figure'=>$figure,
             'commentForm'=>$form->createView()
         ]);
 
-
     }
+
 
     #[Route('/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Figure $figure): Response
@@ -112,6 +114,61 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @param Request $request
+     * @param FigureImage $figureImage
+     * @return Response
+     * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
+     */
+    #[Route('/{id}/editOnePhoto/{imageId}', name: 'figure_editOnePhoto', methods: ['GET', 'POST'])]
+    public function editOnePhoto(Request $request, FigureImage $figureImage): Response
+    {
+        $form = $this->createForm(FigurePhotoType::class, $figureImage);
+        $form->handleRequest($request);
+        $figure = $figureImage->getFigure();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $photo = $form->get('file')->getData();
+            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
+            $fileName = $fileUploader->upload($photo);
+            $figureImage->setFileName($fileName);
+            $figureImage->setFigure($figure);
+
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("success", "La modification a bien été effectuée");
+
+            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
+        }
+
+        return $this->render('figure/editOnePhoto.html.twig', [
+            'figure' => $figure,
+            'form' => $form->createView(),
+        ]);
+    }
+
+    #[Route('/{id}/editOneVideo/{videoId}', name: 'figure_editOneVideo', methods: ['GET', 'POST'])]
+    public function editOneVideo(Request $request, FigureVideo $figureVideo): Response
+    {
+        $figure = $figureVideo->getFigure();
+        $form = $this->createForm(FigureVideoType::class, $figureVideo);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $this->getDoctrine()->getManager()->flush();
+            $this->addFlash("success", "La modification a bien été effectuée");
+
+            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
+    }
+
+        return $this->render('figure/editOneVideo.html.twig', [
+            'figure' => $figureVideo,
+            'form' => $form->createView(),
+        ]);
+    }
+
+
 
     #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET','POST'])]
     public function delete(Request $request, Figure $figure): Response
@@ -190,7 +247,6 @@ class FigureController extends AbstractController
     public function deleteVideo(Request $request, Figure $figure, FigureVideo $figureVideo): Response
     {
         $entityManager = $this->getDoctrine()->getManager();
-        dump($figureVideo);
         $figure->removeFigureVideo($figureVideo);
         $entityManager->persist($figure);
         $entityManager->flush();
@@ -206,17 +262,17 @@ class FigureController extends AbstractController
      * @return Response
      * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
      * @ParamConverter("comment", options={"mapping": {"commentId": "id"}})
+     * @IsGranted("comment_delete", subject="comment")
      */
     #[Route('/{figureId}/commentRemove/{commentId}', name: 'comment_delete', methods: ['GET','POST'])]
     public function removeComment(Request $request, Figure $figure, Comment $comment): Response
     {
-            $this->denyAccessUnlessGranted('comment_delete', $comment);
             $entityManager = $this->getDoctrine()->getManager();
             $figure->removeComment($comment);
             $entityManager->flush();
             $this->addFlash("success", "La suppression a bien été effectuée");
 
 
-        return $this->redirectToRoute('figure_show',['id' => $figure->getId()]);
+        return $this->redirectToRoute('figure_show',['slug' => $figure->getSlug()]);
     }
 }
