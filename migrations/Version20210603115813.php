@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20210603115813 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE figure ADD slug VARCHAR(255) NOT NULL');
@@ -25,7 +25,7 @@ final class Version20210603115813 extends AbstractMigration
         $this->addSql('ALTER TABLE user ADD roles JSON NOT NULL, DROP role, DROP photo, CHANGE name name VARCHAR(180) NOT NULL');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP INDEX UNIQ_2F57B37A989D9B62 ON figure');

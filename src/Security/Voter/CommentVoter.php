@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
 
 class CommentVoter extends Voter
 {
-    const COMMENT_DELETE ='comment_delete';
+    const COMMENT_DELETE = 'comment_delete';
 
     protected function supports($attribute, $comment)
     {
@@ -28,7 +28,7 @@ class CommentVoter extends Voter
             return false;
         }
 // on vérifie si le commentaire à un propriétaire
-        if(null === $comment->getUser()) return false;
+        if (null === $comment->getUser()) return false;
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {
@@ -39,7 +39,9 @@ class CommentVoter extends Voter
 
         return false;
     }
-    private function canDelete(Comment $comment, User $user){
+
+    private function canDelete(Comment $comment, User $user)
+    {
         //le propriétaire du commentaire peut le supprimer
         return $comment->getUser() === $user;
     }

@@ -43,7 +43,7 @@ class Figure
 
 
     /**
-     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure", cascade={"remove"})
+     * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure", cascade={"persist","remove"})
      */
     private $comments;
 
@@ -76,9 +76,6 @@ class Figure
     private $figureVideos;
 
 
-
-
-
     public function __construct()
     {
 
@@ -88,9 +85,6 @@ class Figure
         $this->figureImages = new ArrayCollection();
         $this->figureVideos = new ArrayCollection();
     }
-
-
-
 
 
     public function getId(): ?int
@@ -271,18 +265,18 @@ class Figure
     /**
      * @ORM\PreUpdate()
      */
-    public function setUpdateDateValue(){
+    public function setUpdateDateValue()
+    {
         $this->setUpdateDate(new \DateTime());
     }
 
     /**
      * @ORM\PrePersist()
      */
-    public function setCreatedAtValue(){
+    public function setCreatedAtValue()
+    {
         $this->setCreatedAt(new \DateTime());
     }
-
-
 
 
 }

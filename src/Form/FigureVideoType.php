@@ -2,6 +2,7 @@
 
 
 namespace App\Form;
+
 use App\Entity\FigureVideo;
 use App\Service\VideoLinkSanitizer;
 use Symfony\Component\Form\AbstractType;
@@ -13,7 +14,8 @@ class FigureVideoType extends AbstractType
 {
 
 
-    public function __construct(private VideoLinkSanitizer $sanitizer){
+    public function __construct(private VideoLinkSanitizer $sanitizer)
+    {
 
     }
 

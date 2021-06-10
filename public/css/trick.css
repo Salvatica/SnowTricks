@@ -1,109 +1,114 @@
 :root {
-  --jumbotron-padding-y: 3rem;
+    --jumbotron-padding-y: 3rem;
 }
 
 
-.floatnav{
-	position:fixed;
-	bottom:8px;
-	right:0px;
+.floatnav {
+    position: fixed;
+    bottom: 8px;
+    right: 0px;
 
 
 }
-.floatnav-bottom{
-  display: none;
+
+.floatnav-bottom {
+    display: none;
 
 }
 
-.my-floatnav{
-	margin-top:22px;
+.my-floatnav {
+    margin-top: 22px;
 }
 
-a { color: inherit; }
+a {
+    color: inherit;
+}
 
-.bg-dark.navbar-dark .navbar-nav .active>.nav-link,
+.bg-dark.navbar-dark .navbar-nav .active > .nav-link,
 .bg-dark.navbar-dark .navbar-nav .nav-link:focus,
-.bg-dark.navbar-dark .navbar-nav .nav-link:hover
-{ color: white !important;}
+.bg-dark.navbar-dark .navbar-nav .nav-link:hover {
+    color: white !important;
+}
 
 .jumbotron {
-  padding-top: var(--jumbotron-padding-y);
-  padding-bottom: var(--jumbotron-padding-y);
-  margin-bottom: 0;
-  height: 100vh;
-  background: #fff url("../images/fond.jpg") no-repeat center center;
-  -webkit-background-size: 100% 100%;
-  -moz-background-size: 100% 100%;
-  -o-background-size: 100% 100%;
-  background-size: 100% 100%;
+    padding-top: var(--jumbotron-padding-y);
+    padding-bottom: var(--jumbotron-padding-y);
+    margin-bottom: 0;
+    height: 100vh;
+    background: #fff url("../images/fond.jpg") no-repeat center center;
+    -webkit-background-size: 100% 100%;
+    -moz-background-size: 100% 100%;
+    -o-background-size: 100% 100%;
+    background-size: 100% 100%;
 }
-  .lead{
-  padding: 1rem;
-  background-color:rgba(255,255,255,0.5);
+
+.lead {
+    padding: 1rem;
+    background-color: rgba(255, 255, 255, 0.5);
 }
+
 .bottomright {
-  position: absolute;
-  bottom: 8px;
-  right: 16px;
+    position: absolute;
+    bottom: 8px;
+    right: 16px;
 }
 
 .navarrow {
-  font-size: xx-large;
-  color: deepskyblue;
+    font-size: xx-large;
+    color: deepskyblue;
 }
 
 @media (orientation: portrait) {
     .jumbotron {
         background: url("../images/fond-portrait.png") no-repeat center center;
     }
-  }
+}
 
 @media (min-width: 768px) {
-  .jumbotron {
-    padding-top: calc(var(--jumbotron-padding-y) * 2);
-    padding-bottom: calc(var(--jumbotron-padding-y) * 2);
-    
-  }
+    .jumbotron {
+        padding-top: calc(var(--jumbotron-padding-y) * 2);
+        padding-bottom: calc(var(--jumbotron-padding-y) * 2);
+
+    }
 }
 
 .jumbotron p:last-child {
-  margin-bottom: 0;
+    margin-bottom: 0;
 }
 
 .jumbotron-heading {
-  font-weight: 300;
+    font-weight: 300;
 }
 
 .jumbotron .container {
-  max-width: 40rem;
+    max-width: 40rem;
 }
 
 footer {
-color: white;
+    color: white;
 }
 
 footer p {
-  margin-bottom: 0px;
-  margin-top: 4px;
+    margin-bottom: 0px;
+    margin-top: 4px;
 
 }
 
 
 .box-shadow {
-  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+    box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
 }
 
-#action-icons
-{
-  position:absolute;
-  right: 300px;
-}
-.photo-list{
-  background-color:rgba(255,255,255,0.5);
+#action-icons {
+    position: absolute;
+    right: 300px;
 }
 
-.btn
-{
-  flex-flow: row-reverse;
+.photo-list {
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+.btn {
+    flex-flow: row-reverse;
 }
 

@@ -66,17 +66,17 @@ class FigureController extends AbstractController
         $comment->setUser($user);
 
         $form = $this->createForm(CommentType::class, $comment);
-        $form ->handleRequest($request);
+        $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()) {
-                $comment->setFigure($figure);
-                $entityManager->persist($comment);
-                $entityManager->flush();
-                return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
-            }
-        return $this -> render ('figure/show.html.twig',[
-            'figure'=>$figure,
-            'commentForm'=>$form->createView()
+        if ($form->isSubmitted() && $form->isValid()) {
+            $comment->setFigure($figure);
+            $entityManager->persist($comment);
+            $entityManager->flush();
+            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
+        }
+        return $this->render('figure/show.html.twig', [
+            'figure' => $figure,
+            'commentForm' => $form->createView()
         ]);
 
     }
@@ -160,7 +160,7 @@ class FigureController extends AbstractController
             $this->addFlash("success", "La modification a bien été effectuée");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
-    }
+        }
 
         return $this->render('figure/editOneVideo.html.twig', [
             'figure' => $figureVideo,
@@ -169,8 +169,7 @@ class FigureController extends AbstractController
     }
 
 
-
-    #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET','POST'])]
+    #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Figure $figure): Response
     {
         if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->query->get('_token'))) {
@@ -213,13 +212,12 @@ class FigureController extends AbstractController
     #[Route('/{figureId}/removeFigureImage/{imageId}', name: 'image_delete', methods: ['GET'])]
     public function deleteImage(Request $request, Figure $figure, FigureImage $figureImage): Response
     {
-            $entityManager = $this->getDoctrine()->getManager();
-            dump($figureImage);
-            $figure->removeFigureImage($figureImage);
-            $entityManager->persist($figure);
-            $entityManager->flush();
+        $entityManager = $this->getDoctrine()->getManager();
+        $figure->removeFigureImage($figureImage);
+        $entityManager->persist($figure);
+        $entityManager->flush();
 
-        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()) );
+        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
 
 
@@ -264,15 +262,15 @@ class FigureController extends AbstractController
      * @ParamConverter("comment", options={"mapping": {"commentId": "id"}})
      * @IsGranted("comment_delete", subject="comment")
      */
-    #[Route('/{figureId}/commentRemove/{commentId}', name: 'comment_delete', methods: ['GET','POST'])]
+    #[Route('/{figureId}/commentRemove/{commentId}', name: 'comment_delete', methods: ['GET', 'POST'])]
     public function removeComment(Request $request, Figure $figure, Comment $comment): Response
     {
-            $entityManager = $this->getDoctrine()->getManager();
-            $figure->removeComment($comment);
-            $entityManager->flush();
-            $this->addFlash("success", "La suppression a bien été effectuée");
+        $entityManager = $this->getDoctrine()->getManager();
+        $figure->removeComment($comment);
+        $entityManager->flush();
+        $this->addFlash("success", "La suppression a bien été effectuée");
 
 
-        return $this->redirectToRoute('figure_show',['slug' => $figure->getSlug()]);
+        return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
     }
 }

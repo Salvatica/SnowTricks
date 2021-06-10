@@ -4,11 +4,11 @@
 {% block title %}New Figure{% endblock %}
 
 {% block body %}
-{% if app.user %}
-    <h2>Création d'une figure </h2>
+    {% if app.user %}
+        <h2>Création d'une figure </h2>
 
-    <a href="{{ path('figure_new' ) }}"></a>
-{% endif %}
+        <a href="{{ path('figure_new' ) }}"></a>
+    {% endif %}
 
     {{ form_start(formFigure) }}
     <div class="row">
@@ -22,24 +22,26 @@
             {{ form_row(formFigure.files, {'attr': {'placeholder': "images"}}) }}
 
 
-
-            <ul class="figureVideos" data-prototype="{{ form_widget(formFigure.figureVideos.vars.prototype)|e('html_attr') }}">
+            <ul class="figureVideos"
+                data-prototype="{{ form_widget(formFigure.figureVideos.vars.prototype)|e('html_attr') }}">
 
                 {% for formVideo in formFigure.figureVideos %}
 
-                    <li>{{ form_row(formVideo.fileName)}}</li>
+                    <li>{{ form_row(formVideo.fileName) }}</li>
 
                     <button class="btn btn-danger btn-sm" form="figureVideosForm">Delete</button>
                 {% endfor %}
 
             </ul>
-            <button type="button" class="btn btn-primary add_item_link mb-4" data-collection-holder-class="figureVideos">Add a video</button>
+            <button type="button" class="btn btn-primary add_item_link mb-4"
+                    data-collection-holder-class="figureVideos">Add a video
+            </button>
 
 
-    <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}</button>
+            <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}</button>
 
 
-    </div>
+        </div>
     </div>
     {{ form_end(formFigure) }}
 
@@ -81,14 +83,14 @@
                 $collectionHolder.append($newFormLi)
             }
 
-            jQuery(document).ready(function() {
+            jQuery(document).ready(function () {
                 // Get the ul that holds the collection of tags
                 var $tagsCollectionHolder = $('ul.figureVideos');
                 // count the current form inputs we have (e.g. 2), use that as the new
                 // index when inserting a new item (e.g. 2)
                 $tagsCollectionHolder.data('index', $tagsCollectionHolder.find('input').length);
 
-                $('body').on('click', '.add_item_link', function(e) {
+                $('body').on('click', '.add_item_link', function (e) {
                     var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
                     // add a new tag form (see next code block)
                     addFormToCollection($collectionHolderClass);
@@ -96,5 +98,5 @@
             });
 
         </script>
-    {%  endblock%}
+    {% endblock %}
 

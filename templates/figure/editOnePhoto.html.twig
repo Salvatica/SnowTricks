@@ -9,19 +9,20 @@
 
 
     </div>
-    <div class="container-fluid">  {#  insert image   #}
+    <div class="container-fluid">  {# insert image #}
         <div class="row">
             {% for photo in figure.figureImages %}
-                <div class="col-md-2 photo-list embed-responsive-16by9"  >
-                    <div class="card mb-4 box-shadow" >
-                        <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail"  alt="...">
+                <div class="col-md-2 photo-list embed-responsive-16by9">
+                    <div class="card mb-4 box-shadow">
+                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
 
                         <div class="position">
-                            <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}" class="float-right">
+                            <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
+                               class="float-right">
                                 <i class="far fa-edit"></i>
 
                             </a>
-                            <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} )}}"  >
+                            <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                             </a>
 
@@ -30,7 +31,7 @@
                 </div>
             {% endfor %}
 
-            {% for video in figure.figureVideos %} {#  insert video #}
+            {% for video in figure.figureVideos %} {# insert video #}
                 <div class="col-md-2 video-list embed-responsive-16by9">
                     <div class="card mb-4 box-shadow">
 
@@ -45,7 +46,7 @@
                                 <i class="far fa-edit"></i>
 
                             </a>
-                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} )}}"   >
+                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                             </a>
 
@@ -60,13 +61,13 @@
     </div>
     <div class="row">
 
-    <div class="col-sm-6 offset-sm-2">
-    <p>
-        {{ form_start(form) }}
-            {{ form_row(form.file, {'attr': {'placeholder': "image"}}) }}
+        <div class="col-sm-6 offset-sm-2">
+            <p>
+                {{ form_start(form) }}
+                {{ form_row(form.file, {'attr': {'placeholder': "image"}}) }}
 
-    </p>
-    </div>
+            </p>
+        </div>
         <div class="d-flex align-items-end">
 
             <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>

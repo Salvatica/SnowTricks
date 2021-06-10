@@ -17,6 +17,6 @@ use Symfony\Component\Validator\Constraint;
 
     public function validatedBy()
     {
-        return static::class.'Validator';
+        return static::class . 'Validator';
     }
 }

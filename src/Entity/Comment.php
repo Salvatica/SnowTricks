@@ -16,7 +16,6 @@ class Comment
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
-
      */
     private $id;
 
@@ -96,10 +95,12 @@ class Comment
 
         return $this;
     }
+
     /**
      * @ORM\PrePersist()
      */
-    public function setCreatedAtValue(){
+    public function setCreatedAtValue()
+    {
         $this->setDate(new \DateTime());
     }
 

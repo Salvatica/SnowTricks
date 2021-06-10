@@ -9,37 +9,38 @@
 
         <div class="position">
             <div class="float-right">
-            <a href="{{ path('figure_edit', {'id': figure.id}) }}" >
-                <i class="far fa-edit"></i>
-            </a>
+                <a href="{{ path('figure_edit', {'id': figure.id}) }}">
+                    <i class="far fa-edit"></i>
+                </a>
                 <button class="btn"><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                 </button>
             </div>
         </div>
 
     </div>
-    <div class="container-fluid">  {#  insert image   #}
+    <div class="container-fluid">  {# insert image #}
         <div class="row">
             {% for photo in figure.figureImages %}
-            <div class="col-md-2 photo-list embed-responsive-16by9"  >
-                <div class="card mb-4 box-shadow" >
-                <img src="{{ asset('uploads/photos/' ~ photo)}}" class="img-thumbnail"  alt="...">
+                <div class="col-md-2 photo-list embed-responsive-16by9">
+                    <div class="card mb-4 box-shadow">
+                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
 
-                <div class="position">
-                    <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}" class="float-right">
-                        <i class="far fa-edit"></i>
+                        <div class="position">
+                            <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
+                               class="float-right">
+                                <i class="far fa-edit"></i>
 
-                    </a>
-                    <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} )}}"  >
-                        <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                    </a>
+                            </a>
+                            <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
+                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                            </a>
 
+                        </div>
+                    </div>
                 </div>
-            </div>
-            </div>
-        {% endfor %}
+            {% endfor %}
 
-            {% for video in figure.figureVideos %} {#  insert video #}
+            {% for video in figure.figureVideos %} {# insert video #}
                 <div class="col-md-2 video-list embed-responsive-16by9">
                     <div class="card mb-4 box-shadow">
 
@@ -50,11 +51,12 @@
                                 allowfullscreen>
                         </iframe>
                         <div class="position">
-                            <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}" class="float-right">
+                            <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}"
+                               class="float-right">
                                 <i class="far fa-edit"></i>
 
                             </a>
-                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} )}}"   >
+                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                             </a>
 
@@ -64,8 +66,8 @@
                 </div>
             {% endfor %}
 
-            </div>
         </div>
+    </div>
     </div>
 
     <div class="row"> {# form for modify text, image and video #}
@@ -74,10 +76,10 @@
             {{ form_start(form) }}
 
 
-                {{ form_row(form.name) }}
+            {{ form_row(form.name) }}
 
 
-                {{ form_row(form.description) }}
+            {{ form_row(form.description) }}
 
 
             <div class="form-floating mb-4">
@@ -91,13 +93,16 @@
 
                 {{ form_row(form.files, {'attr': {'placeholder': "images"}}) }}
 
-               <div class="figureVideos" data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
+                <div class="figureVideos"
+                     data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
                     {% for formVideo in form.figureVideos %}
                         <div class="figureVideo">{{ form_row(formVideo.fileName) }}</div>
 
                     {% endfor %}
-              </div>
-                <button type="button" class="btn btn-primary add_item_link mb-4" data-collection-holder-class="figureVideos">Add a video</button>
+                </div>
+                <button type="button" class="btn btn-primary add_item_link mb-4"
+                        data-collection-holder-class="figureVideos">Add a video
+                </button>
 
             </div>
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -146,22 +151,22 @@
         }
 
 
-        function addFormDeleteLink($entry){
+        function addFormDeleteLink($entry) {
             var $removeFormButton = $('<button type="button" class="float-right">Supprimer</button>');
             $entry.append($removeFormButton);
 
-            $removeFormButton.on('click', function(e) {
+            $removeFormButton.on('click', function (e) {
                 // remove the li for the tag form
                 $entry.remove();
             });
         }
 
-        jQuery(document).ready(function() {
+        jQuery(document).ready(function () {
             // Get the ul that holds the collection of tags
             var $collectionHolder = $('div.figureVideos');
 
             // add a delete link to all of the existing tag form li elements
-            $collectionHolder.find('div.figureVideo').each(function() {
+            $collectionHolder.find('div.figureVideo').each(function () {
                 addFormDeleteLink($(this));
             });
 
@@ -170,7 +175,7 @@
             // index when inserting a new item (e.g. 2)
             $collectionHolder.data('index', $collectionHolder.find('div.figureVideo').length);
 
-            $('body').on('click', '.add_item_link', function(e) {
+            $('body').on('click', '.add_item_link', function (e) {
                 var $collectionHolderClass = $(e.currentTarget).data('collectionHolderClass');
                 // add a new tag form (see next code block)
                 addFormToCollection($collectionHolderClass);

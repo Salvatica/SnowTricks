@@ -12,12 +12,12 @@ use Doctrine\Migrations\AbstractMigration;
  */
 final class Version20210422144400 extends AbstractMigration
 {
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return '';
     }
 
-    public function up(Schema $schema) : void
+    public function up(Schema $schema): void
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('CREATE TABLE figure_image (id INT AUTO_INCREMENT NOT NULL, figure_id INT NOT NULL, file_name VARCHAR(255) NOT NULL, INDEX IDX_D71082665C011B5 (figure_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8mb4 COLLATE `utf8mb4_unicode_ci` ENGINE = InnoDB');
@@ -27,7 +27,7 @@ final class Version20210422144400 extends AbstractMigration
         $this->addSql('ALTER TABLE figure DROP figure_image, DROP figure_video, DROP figure_images');
     }
 
-    public function down(Schema $schema) : void
+    public function down(Schema $schema): void
     {
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql('DROP TABLE figure_image');

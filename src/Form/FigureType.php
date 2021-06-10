@@ -27,12 +27,11 @@ class FigureType extends AbstractType
             ->add('name', TextType::class)
             ->add('description', TextType::class, [
             ])
-            -> add('category', EntityType::class,[
-                'class'=> Category::class,
-                'choice_label'=>'title',
+            ->add('category', EntityType::class, [
+                'class' => Category::class,
+                'choice_label' => 'title',
 
             ])
-
             ->add('files', FileType::class, [
                 'label' => 'Images',
                 'mapped' => false,
@@ -58,6 +57,7 @@ class FigureType extends AbstractType
 
         ]);
     }
+
     public function configureOptionsVideos(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

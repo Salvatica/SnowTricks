@@ -7,13 +7,13 @@
     {{ form_start(form) }}
     <div class="container">
         <div class="row">
-        <div class="col-md-6">
-    {{ form_row(form.name, {'label':'Nom d\'utilisateur', 'attr': {'placeholder': 'Nom d\'utilisateur'}}) }}
-    {{ form_row(form.email, {'label': 'adresse mail', 'attr': {'placeholder': 'Saisissez votre adresse email'}}) }}
-    {{ form_row(form.plainPassword) }}
-    </div>
+            <div class="col-md-6">
+                {{ form_row(form.name, {'label':'Nom d\'utilisateur', 'attr': {'placeholder': 'Nom d\'utilisateur'}}) }}
+                {{ form_row(form.email, {'label': 'adresse mail', 'attr': {'placeholder': 'Saisissez votre adresse email'}}) }}
+                {{ form_row(form.plainPassword) }}
+            </div>
 
-    </div>
+        </div>
         <button type="submit" class="btn btn-success">Inscription !</button>
     </div>
     {{ form_end(form) }}

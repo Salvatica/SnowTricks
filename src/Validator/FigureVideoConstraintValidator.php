@@ -15,14 +15,13 @@ class FigureVideoConstraintValidator extends ConstraintValidator
             return;
         }
 
-        if(preg_match('#^https://www\.youtube\.com/embed#', $value)){
+        if (preg_match('#^https://www\.youtube\.com/embed#', $value)) {
             return;
         }
-        if(preg_match('#^https://www\.dailymotion\.com/embed/video#', $value)){
+        if (preg_match('#^https://www\.dailymotion\.com/embed/video#', $value)) {
             return;
         }
-        if(preg_match('<iframe(?:\b|_).*?(?:\b|_)src=\"https:\/\/www.(youtube|dailymotion).com\/(?:\b|_).*?(?:\b|_)iframe>', $value))
-        {
+        if (preg_match('<iframe(?:\b|_).*?(?:\b|_)src=\"https:\/\/www.(youtube|dailymotion).com\/(?:\b|_).*?(?:\b|_)iframe>', $value)) {
             return;
         }
 

@@ -30,7 +30,6 @@ class FigureImage
     private $figure;
 
 
-
     public function __toString(): string
     {
         return $this->getFileName();
@@ -65,6 +64,6 @@ class FigureImage
 
         return $this;
     }
-    
+
 
 }

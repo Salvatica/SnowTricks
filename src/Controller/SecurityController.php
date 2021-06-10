@@ -19,8 +19,8 @@ use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class SecurityController extends AbstractController
 {
-    #[Route('/inscription', name:'security_registration')]
-    public function registration(Request $request,EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): RedirectResponse|Response
+    #[Route('/inscription', name: 'security_registration')]
+    public function registration(Request $request, EntityManagerInterface $entityManager, UserPasswordEncoderInterface $encoder): RedirectResponse|Response
     {
 
         $user = new User;
@@ -28,8 +28,7 @@ class SecurityController extends AbstractController
 
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid())
-        {
+        if ($form->isSubmitted() && $form->isValid()) {
             $hash = $encoder->encodePassword($user, $form['plainPassword']->getData());
             $user->setPassword($hash);
 
@@ -44,12 +43,12 @@ class SecurityController extends AbstractController
         ]);
     }
 
-    #[Route('/login', name:'app_login')]
+    #[Route('/login', name: 'app_login')]
     public function login(AuthenticationUtils $authenticationUtils): Response
     {
-         if ($this->getUser()) {
-             return $this->redirectToRoute('homepage');
-         }
+        if ($this->getUser()) {
+            return $this->redirectToRoute('homepage');
+        }
 
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
@@ -57,7 +56,7 @@ class SecurityController extends AbstractController
         return $this->render('security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
     }
 
-    #[Route('/logout', name:'app_logout')]
+    #[Route('/logout', name: 'app_logout')]
     public function logout()
     {
 
