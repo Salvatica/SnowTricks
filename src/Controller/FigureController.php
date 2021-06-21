@@ -13,7 +13,6 @@ use App\Form\FigureVideoType;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
 use Doctrine\ORM\EntityManagerInterface;
-use phpDocumentor\Reflection\Types\Mixed_;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -29,7 +28,7 @@ class FigureController extends AbstractController
     {
     }
 
-
+// création d'une nouvelle figure
     /**
      * @param Request $request
      * @param EntityManagerInterface $entityManager
@@ -57,6 +56,7 @@ class FigureController extends AbstractController
 
         ]);
     }
+// affichage d'une figure en utilisant "slug" pour l'url
 
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure): Response
@@ -80,7 +80,7 @@ class FigureController extends AbstractController
         ]);
 
     }
-
+//edition d'une figure
 
     #[Route('/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Figure $figure): Response
@@ -115,14 +115,14 @@ class FigureController extends AbstractController
         ]);
     }
 
-
+// Edition d'une photo
     /**
      * @param Request $request
      * @param FigureImage $figureImage
      * @return Response
      * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
      */
-    #[Route('/{id}/editOnePhoto/{imageId}', name: 'figure_editOnePhoto', methods: ['GET', 'POST'])]
+    #[Route('/editOnePhoto/{imageId}', name: 'figure_editOnePhoto', methods: ['GET', 'POST'])]
     public function editOnePhoto(Request $request, FigureImage $figureImage): Response
     {
         $form = $this->createForm(FigurePhotoType::class, $figureImage);
@@ -144,11 +144,15 @@ class FigureController extends AbstractController
 
         return $this->render('figure/editOnePhoto.html.twig', [
             'figure' => $figure,
+            'photo' => $figureImage,
             'form' => $form->createView(),
         ]);
     }
-
-    #[Route('/{id}/editOneVideo/{videoId}', name: 'figure_editOneVideo', methods: ['GET', 'POST'])]
+// Edition d'une vidéo
+    /**
+     * @ParamConverter("figureVideo", options={"mapping": {"videoId":"id"}})
+     */
+    #[Route('/editOneVideo/{videoId}', name: 'figure_editOneVideo', methods: ['GET', 'POST'])]
     public function editOneVideo(Request $request, FigureVideo $figureVideo): Response
     {
         $figure = $figureVideo->getFigure();
@@ -168,7 +172,7 @@ class FigureController extends AbstractController
         ]);
     }
 
-
+// suppression d'une figure
     #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Figure $figure): Response
     {
@@ -200,6 +204,7 @@ class FigureController extends AbstractController
         }
     }
 
+    // suppression d'une photo
     /**
      * @param Request $request
      * @param Figure $figure
@@ -231,6 +236,7 @@ class FigureController extends AbstractController
             $figure->addFigureVideo($video);
         }
     }
+// suppression d'une vidéo
 
     /**
      * @param Request $request
@@ -253,6 +259,7 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
 
+    // suppression d'un commentaire par son auteur
     /**
      * @param Request $request
      * @param Figure $figure

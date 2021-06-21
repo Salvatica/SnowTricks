@@ -3,26 +3,25 @@
 {% block title %}Edit One Video{% endblock %}
 
 {% block body %}
-    <div>
 
-        <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
+   <div class ="container">
 
-    </div>
 
-    <div class="col-sm-6 offset-sm-2">
-        <p>
             {{ form_start(form) }}
+    <div class="row">
+        <div class="col-sm-6">
+
             {{ form_row(form.fileName, {'attr': {'placeholder': "lien youtube"}}) }}
 
-        </p>
-    </div>
+
     <div class="d-flex align-items-end">
 
-        <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>
         <button class="btn btn-primary btn-sm">{{ button_label|default('Validate') }}</button>
 
     </div>
-
+    </div>
     </div>
     {{ form_end(form) }}
+    </div>
+    <a class="btn btn-secondary btn-sm" href="{{ path('figure_edit', {'id': figure.id}) }}">Back</a>
 {% endblock %}

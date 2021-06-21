@@ -3,78 +3,31 @@
 {% block title %}Edit One Photo{% endblock %}
 
 {% block body %}
-    <div>
-
-        <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
+<div class="container">
 
 
-    </div>
-    <div class="container-fluid">  {# insert image #}
-        <div class="row">
-            {% for photo in figure.figureImages %}
-                <div class="col-md-2 photo-list embed-responsive-16by9">
-                    <div class="card mb-4 box-shadow">
-                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
-
-                        <div class="position">
-                            <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
-                               class="float-right">
-                                <i class="far fa-edit"></i>
-
-                            </a>
-                            <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
-                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                            </a>
-
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
-
-            {% for video in figure.figureVideos %} {# insert video #}
-                <div class="col-md-2 video-list embed-responsive-16by9">
-                    <div class="card mb-4 box-shadow">
-
-                        <iframe
-                                src="{{ video.fileName }}"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
-                        <div class="position">
-                            <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
-                                <i class="far fa-edit"></i>
-
-                            </a>
-                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
-                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                            </a>
-
-                        </div>
-
-                    </div>
-                </div>
-            {% endfor %}
-
-        </div>
-    </div>
-    </div>
+    {{ form_start(form) }}
     <div class="row">
-
-        <div class="col-sm-6 offset-sm-2">
-            <p>
-                {{ form_start(form) }}
-                {{ form_row(form.file, {'attr': {'placeholder': "image"}}) }}
-
-            </p>
+        <div class="col-sm-6">
+            <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail img-fluid" alt="...">
         </div>
-        <div class="d-flex align-items-end">
 
-            <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>
-            <button class="btn btn-primary btn-sm">{{ button_label|default('Validate') }}</button>
+        <div class="col-sm-6">
+            <p>
+
+                {{ form_row(form.file, {'attr': {'placeholder': "image"}}) }}
+            </p>
+            <p>
+
+                <button class="btn btn-primary btn-sm btn-block">{{ button_label|default('Validate') }}</button>
+            </p>
 
         </div>
 
     </div>
     {{ form_end(form) }}
+
+</div>
+    <a class="btn btn-secondary btn-sm" href="{{ path('figure_edit', {'id': figure.id}) }}">Back</a>
+
 {% endblock %}
