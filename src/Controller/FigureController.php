@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\FigurePhotoType;
 use App\Form\FigureType;
 use App\Form\FigureVideoType;
+use App\Repository\CommentRepository;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,6 +20,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Twig\Environment;
 
 
 #[Route('/figure')]
@@ -59,8 +61,11 @@ class FigureController extends AbstractController
 // affichage d'une figure en utilisant "slug" pour l'url
 
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure): Response
+    public function show(Request $request, Environment $twig, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
     {
+        $offset = max(0, $request->query->getInt('offset', 0));// rajout
+        $paginator = $commentRepository->getCommentPaginator($figure, $offset);//rajout
+
         $comment = new Comment();
         $user = $this->getUser();
         $comment->setUser($user);
@@ -74,10 +79,13 @@ class FigureController extends AbstractController
             $entityManager->flush();
             return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
         }
-        return $this->render('figure/show.html.twig', [
+        return new Response($twig->render('figure/show.html.twig', [
             'figure' => $figure,
+            'comments' => $paginator, // rajout
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE, // rajout
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE), // rajout
             'commentForm' => $form->createView()
-        ]);
+        ]));
 
     }
 //edition d'une figure

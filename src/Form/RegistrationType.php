@@ -20,10 +20,10 @@ class RegistrationType extends AbstractType
             ->add('plainPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'first_options' => [
-                    'label' => 'Mot de passe'
+                    'label' => 'entry your password'
                 ],
                 'second_options' => [
-                    'label' => 'Confirmer votre mot de passe'
+                    'label' => 'Confirm your password'
                 ],
                 'mapped' => false
             ]);

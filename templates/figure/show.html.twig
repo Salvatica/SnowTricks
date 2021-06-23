@@ -55,11 +55,11 @@
             <div class="content mb-4">
                 <h6>{{ figure.description }}</h6>
 
-                <div class="metadata">Ecrit le {{ figure.createdAt | date ('d/m/y') }}
-                    à {{ figure.createdAt | date('H:i') }} dans la catégorie {{ figure.category }}
+                <div class="metadata">Posted : {{ figure.createdAt | date ('d/m/y') }}
+                    at {{ figure.createdAt | date('H:i') }} in the category {{ figure.category }}
                     {% if figure.updateDate %}
 
-                        modifié le {{ figure.updateDate | date ('d/m/y') }}
+                        modify at {{ figure.updateDate | date ('d/m/y') }}
 
                     {% else %}
                         .
@@ -77,7 +77,7 @@
             {% if app.user %}
                 {{ form_start(commentForm) }}
                 <div class="row">
-                    <div class="col-sm-6 offset-sm-3"{{ form_row(commentForm.content, {'attr': {'placeholder': "Votre commentaire"}}) }}
+                    <div class="col-sm-6 offset-sm-3"{{ form_row(commentForm.content, {'attr': {'placeholder': "Your comment"}}) }}
                 </div>
                 <div class="col-sm-2 offset-sm-5">
                     <input name="submit" type="submit" id="submit" class="submit btn btn-block btn-primary my-2"
@@ -89,8 +89,8 @@
 
             {% else %}
 
-                <h6>Vous ne pouvez pas commenter si vous n'êtes pas connecté</h6>
-                <a href="{{ path('app_login') }}" class="btn btn-primary">Connexion</a>
+                <h6>You can't comment if you are not connected</h6>
+                <a href="{{ path('app_login') }}" class="btn btn-primary">Connect</a>
             {% endif %}
 
         </section>
@@ -98,7 +98,13 @@
         <HR align=center size=50 width="50%">
 
         <div class="comment">
-            {% for comment in figure.comments %}
+
+            {# rajout #}
+            {%  if comments|length > 0 %}
+            <div> There are {{ comments|length }} comments.</div>
+            {# fin rajout #}
+
+            {% for comment in comments %}
                 <div class="row">
                     <div class="col-sm-6 offset-sm-3">
                         <div class="card bg-light">
@@ -112,7 +118,7 @@
                                 {{ comment.content | raw }}
                                 <hr>
                                 <div class="d-flex justify-content-end">
-                                    posté le {{ comment.date | format_datetime(locale='fr') }}
+                                    posted : {{ comment.date | format_datetime(locale='fr') }}
 
                                 </div>
                                 {% if is_granted("comment_delete", comment) %}
@@ -127,7 +133,15 @@
                     </div>
                 </div>
             {% endfor %}
-
+            {% endif %}
+{# rajout #}
+            {% if previous >=0 %}
+                <a href="{{ path('figure_show', {slug: figure.slug, offset: previous }) }}">Previous</a>
+            {% endif %}
+            {% if next < comments|length %}
+                <a href="{{ path('figure_show', {slug: figure.slug, offset: next}) }}">Next</a>
+            {% endif %}
+{# fin rajout #}
         </div>
     </div>
 

@@ -146,7 +146,7 @@ class SecurityController extends AbstractController
             }
 
             else{
-                return $this->render('forgottenPasswordNewForm.html.twig', ['token'=>$token]);
+                return $this->render('security/forgottenPasswordNewForm.html.twig', ['token'=>$token]);
             }
         }
 }
