@@ -16,14 +16,14 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    public const PAGINATOR_PER_PAGE = 5;
+    public const PAGINATOR_PER_PAGE = 5; // nombre de commentaires par pages
 
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Comment::class);
     }
 
-    public function getCommentPaginator(Figure $figure, int $offset): Paginator //rajout
+    public function getCommentPaginator(Figure $figure, int $offset): Paginator //pagination comments
     {
             $query = $this->createQueryBuilder('c')
                 ->andWhere('c.figure = :figure')

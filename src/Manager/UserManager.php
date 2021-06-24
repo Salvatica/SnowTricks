@@ -46,6 +46,7 @@ class UserManager
 
     }
 
+
     public function forgotPass(User $user)
     {
         $token = md5(uniqid());

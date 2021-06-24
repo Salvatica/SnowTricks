@@ -63,8 +63,8 @@ class FigureController extends AbstractController
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Environment $twig, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
     {
-        $offset = max(0, $request->query->getInt('offset', 0));// rajout
-        $paginator = $commentRepository->getCommentPaginator($figure, $offset);//rajout
+        $offset = max(0, $request->query->getInt('offset', 0));// pagination comments
+        $paginator = $commentRepository->getCommentPaginator($figure, $offset);
 
         $comment = new Comment();
         $user = $this->getUser();
@@ -86,7 +86,6 @@ class FigureController extends AbstractController
             'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE), // rajout
             'commentForm' => $form->createView()
         ]));
-
     }
 //edition d'une figure
 

@@ -48,11 +48,13 @@ class AppFixtures extends Fixture
         }
 
 
+        $categoryList = [];
         for ($i = 0; $i < 3; $i++) {
             $category = new Category();
             $category->setDescription("Ma  description " . $i);
             $category->setTitle("Title" . $i);
             $manager->persist($category);
+            $categoryList[] = $category;
         }
 
 
@@ -60,7 +62,7 @@ class AppFixtures extends Fixture
             $figure = new Figure();
             $figure->setDescription("Ma description " . $i);
             $figure->setName("Montagne " . $i);
-            $figure->setCategory($category);
+            $figure->setCategory($categoryList[array_rand($categoryList)]);
 
             for ($j = 1; $j <= 10; $j++) {
                 $comment = new Comment();

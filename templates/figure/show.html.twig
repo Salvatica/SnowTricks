@@ -22,16 +22,18 @@
 
     <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
 
-    <div class="container-fluid">
+    <div class="container-fluid ">
 
-        <div class="row mb-4">
-            {% for photo in figure.figureImages %}
-                <div class="col-md-2 photo-list embed-responsive-16by9">
-                    <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
-                </div>
-            {% endfor %}
-            {% for video in figure.figureVideos %}
-                <div class="col-md-2 photo-list">
+        <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias</button>
+        <section id="figure-medias-list" class="d-none d-sm-block">
+            <div class="row mb-4 ">
+                {% for photo in figure.figureImages %}
+                    <div class="col-md-2 photo-list embed-responsive-16by9" >
+                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" >
+                    </div>
+                {% endfor %}
+                {% for video in figure.figureVideos %}
+                <div class="col-md-2 photo-list" >
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe width="560" height="315"
                                 src="{{ video.fileName }}"
@@ -42,8 +44,12 @@
                         </iframe>
                     </div>
                 </div>
+            </div>
+
             {% endfor %}
-        </div>
+    </div>
+
+        </section>
     </div>
 
     <div class="container">
@@ -99,10 +105,10 @@
 
         <div class="comment">
 
-            {# rajout #}
+            {# compte le nombre de commentaires #}
             {%  if comments|length > 0 %}
             <div> There are {{ comments|length }} comments.</div>
-            {# fin rajout #}
+
 
             {% for comment in comments %}
                 <div class="row">
@@ -134,17 +140,21 @@
                 </div>
             {% endfor %}
             {% endif %}
-{# rajout #}
+{# affiche la pagination #}
             {% if previous >=0 %}
                 <a href="{{ path('figure_show', {slug: figure.slug, offset: previous }) }}">Previous</a>
             {% endif %}
             {% if next < comments|length %}
                 <a href="{{ path('figure_show', {slug: figure.slug, offset: next}) }}">Next</a>
             {% endif %}
-{# fin rajout #}
+
         </div>
     </div>
 
     <a class="btn btn-secondary btn-sm " href="{{ path('homepage') }}">Back</a>
 
+{% endblock %}
+
+{% block custom_scripts %}
+    <script src="{{ asset('js/hiddeFigureButton.js') }}"></script>
 {% endblock %}
