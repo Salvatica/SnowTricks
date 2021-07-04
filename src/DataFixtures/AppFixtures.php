@@ -41,32 +41,29 @@ class AppFixtures extends Fixture
             $hash = $this->encoder->encodePassword($user, "password");
             $userList[] = $user;
             $user->setPassword($hash);
-
-
             $manager->persist($user);
 
         }
 
-
         $categoryList = [];
-        for ($i = 0; $i < 3; $i++) {
+        $categoryTypes = ["Straight airs", "Grabs", "Spins", "Flips", "Inverted hand plants", "Slides", "Stalls"];
+        foreach ($categoryTypes as $type) {
             $category = new Category();
-            $category->setDescription("Ma  description " . $i);
-            $category->setTitle("Title" . $i);
+            $category->setDescription($type . " description");
+            $category->setTitle($type);
             $manager->persist($category);
             $categoryList[] = $category;
         }
 
-
         for ($i = 1; $i <= 20; $i++) {
             $figure = new Figure();
-            $figure->setDescription("Ma description " . $i);
-            $figure->setName("Montagne " . $i);
+            $figure->setDescription("My description " . $i);
+            $figure->setName("Figure " . $i);
             $figure->setCategory($categoryList[array_rand($categoryList)]);
 
-            for ($j = 1; $j <= 10; $j++) {
+            for ($j = 1; $j <= 20; $j++) {
                 $comment = new Comment();
-                $comment->setContent("Mon commentaire " . $j);
+                $comment->setContent("My comment " . $j);
                 $comment->setUser($userList[array_rand($userList)]);
                 $figure->addComment($comment);
             }
@@ -74,9 +71,7 @@ class AppFixtures extends Fixture
             $manager->persist($figure);
         }
 
-
         $manager->flush();
     }
-
 
 }

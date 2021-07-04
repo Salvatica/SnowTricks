@@ -29,5 +29,4 @@ class ResetPassType extends AbstractType
 
         ]);
     }
-
 }

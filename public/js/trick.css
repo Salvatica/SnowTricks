@@ -20,6 +20,10 @@
 a {
     color: inherit;
 }
+.entete{
+    display: flex;
+    justify-content: flex-end;
+}
 
 .jumbotron {
     padding-top: var(--jumbotron-padding-y);

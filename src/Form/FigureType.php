@@ -20,7 +20,6 @@ use Symfony\Component\Validator\Constraints\Image;
 class FigureType extends AbstractType
 
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
@@ -48,7 +47,6 @@ class FigureType extends AbstractType
             ]);
 
     }
-
 
     public function configureOptions(OptionsResolver $resolver)
     {

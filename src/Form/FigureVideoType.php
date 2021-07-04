@@ -12,8 +12,6 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class FigureVideoType extends AbstractType
 {
-
-
     public function __construct(private VideoLinkSanitizer $sanitizer)
     {
 

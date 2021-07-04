@@ -2,12 +2,10 @@
     position: fixed;
     bottom: 8px;
     right: 0px;
-
 }
 
 .floatnav-bottom {
     display: none;
-
 }
 
 .my-floatnav {
@@ -62,7 +60,6 @@ a {
     .jumbotron {
         padding-top: calc(3rem * 2);
         padding-bottom: calc(3rem * 2);
-
     }
 }
 
@@ -85,9 +82,7 @@ footer {
 footer p {
     margin-bottom: 0px;
     margin-top: 4px;
-
 }
-
 
 .box-shadow {
     box-shadow: .0rem .25rem .75rem rgba(0, 0, 0, .05);
@@ -104,5 +99,15 @@ footer p {
 
 .btn {
     flex-flow: row-reverse;
+}
+
+.img-thumbnail {
+    max-height: 200px;
+    object-fit: contain;
+    width: 100%;
+}
+
+.entete .position-absolute {
+    right: 0;
 }
 

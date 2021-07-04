@@ -21,7 +21,6 @@
 
             {{ form_row(formFigure.files, {'attr': {'placeholder': "images"}}) }}
 
-
             <ul class="figureVideos"
                 data-prototype="{{ form_widget(formFigure.figureVideos.vars.prototype)|e('html_attr') }}">
 
@@ -37,21 +36,15 @@
                     data-collection-holder-class="figureVideos">Add a video
             </button>
 
-
             <button type="submit" class="btn btn-primary mb-4">{{ button_label|default('Validate') }}</button>
-
 
         </div>
     </div>
     {{ form_end(formFigure) }}
 
-
-
-
-
 {% endblock %}
 
-    {% block custom_scripts %}
+{% block custom_scripts %}
         <script>
             //TODO gerer deleteButton
             function addFormToCollection($collectionHolderClass) {
@@ -98,5 +91,5 @@
             });
 
         </script>
-    {% endblock %}
+{% endblock %}
 

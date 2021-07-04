@@ -25,7 +25,7 @@ class AppMailer
         $message = (new Email())
             ->from($this->appMail)
             ->to($user->getEmail())
-            ->subject('Activation de votre compte')
+            ->subject('Activate your account')
             ->html(
                 $this->twig->render(
                     'security/activation.html.twig', ['token' => $user->getActivationToken()]
@@ -35,14 +35,13 @@ class AppMailer
         $this->mailer->send($message);
     }
 
-
     public function sendForgottenMail(User $user){
         dump($user);
 
         $message = (new Email())
             ->from($this->appMail)
             ->to($user->getEmail())
-            ->subject('réinitialisation de votre mot de passe')
+            ->subject('reset your password')
             ->html(
                 $this->twig->render(
                     'security/forgottenPasswordMail.html.twig', ['token' => $user->getResetToken()]

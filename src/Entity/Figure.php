@@ -33,7 +33,7 @@ class Figure
     /**
      * @ORM\Column(type="string", length=255, unique=true)
      */
-    private $slug;
+    private mixed $slug;
 
 
     /**
@@ -86,7 +86,6 @@ class Figure
         $this->figureVideos = new ArrayCollection();
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -120,7 +119,6 @@ class Figure
         $this->slug = $slug;
     }
 
-
     public function getDescription(): ?string
     {
         return $this->description;
@@ -132,7 +130,6 @@ class Figure
 
         return $this;
     }
-
 
     /**
      * @return Collection|Comment[]
@@ -163,7 +160,6 @@ class Figure
 
         return $this;
     }
-
 
     public function getCategory(): ?Category
     {
@@ -277,6 +273,4 @@ class Figure
     {
         $this->setCreatedAt(new \DateTime());
     }
-
-
 }

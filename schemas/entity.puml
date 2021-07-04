@@ -3,20 +3,29 @@ class Figure {
 -id
 -name
 -description
--figure_image
--figure_video
 -update_date
 -created_at
+-slug
 }
 
+class Figure_image{
+-id
+-fileName
+}
+
+class Figure_video{
+-id
+-fileName
+}
 
 class User {
 -id
--nom
--mail
--mdp
+-name
+-email
+-password
 -roles
--photo
+-activationToken
+-resetToken
 }
 
 class Comment{
@@ -33,7 +42,9 @@ class Category{
 
 
 
-Comment"*"--"1" User
-Comment "*"--"1" Figure
+Comment "0..*"--"1" User
+Comment "0..*"--"1" Figure
 Category "1"--"*" Figure
+Figure "1"--"0..*" Figure_image
+Figure "1"--"0..*" Figure_video
 @enduml

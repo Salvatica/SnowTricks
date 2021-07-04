@@ -4,9 +4,10 @@
 
 {% block body %}
 
-
-    <div class="position-absolute">
-        <a href="{{ path('figure_edit', {'id': figure.id}) }}" class="float-right">
+    {% if app.user %}
+        <div class="entete">
+            <div class="position-absolute d-flex">
+        <a class="btn" href="{{ path('figure_edit', {'id': figure.id}) }}">
             <i class="far fa-edit"></i>
         </a>
 
@@ -17,23 +18,26 @@
             {% endblock %}
 
         {% endembed %}
-
+    {% endif %}
+        </div>
     </div>
 
-    <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
+    <div>
+        <img src="{{ asset('uploads/photos/' ~ figure.figureImages[0]) }}" class="img-fluid w-100" alt="Responsive image">
+    </div>
 
     <div class="container-fluid ">
-
-        <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias</button>
+        <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias
+        </button>
         <section id="figure-medias-list" class="d-none d-sm-block">
             <div class="row mb-4 ">
                 {% for photo in figure.figureImages %}
-                    <div class="col-md-2 photo-list embed-responsive-16by9" >
-                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" >
+                    <div class="col-md-3 photo-list">
+                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail">
                     </div>
                 {% endfor %}
                 {% for video in figure.figureVideos %}
-                <div class="col-md-2 photo-list" >
+                <div class="col-md-3 photo-list">
                     <div class="embed-responsive embed-responsive-16by9">
                         <iframe width="560" height="315"
                                 src="{{ video.fileName }}"
@@ -47,15 +51,12 @@
             </div>
 
             {% endfor %}
-    </div>
 
-        </section>
+       </section>
     </div>
 
     <div class="container">
-
         <article>
-
             <h2>{{ figure.name }}</h2>
 
             <div class="content mb-4">
@@ -70,7 +71,6 @@
                     {% else %}
                         .
                     {% endif %}
-
                 </div>
             </div>
         </article>
@@ -87,8 +87,7 @@
                 </div>
                 <div class="col-sm-2 offset-sm-5">
                     <input name="submit" type="submit" id="submit" class="submit btn btn-block btn-primary my-2"
-                           value="Poster"/>
-
+                           value="Post"/>
                 </div>
 
                 {{ form_end(commentForm) }}
@@ -98,63 +97,66 @@
                 <h6>You can't comment if you are not connected</h6>
                 <a href="{{ path('app_login') }}" class="btn btn-primary">Connect</a>
             {% endif %}
-
         </section>
 
         <HR align=center size=50 width="50%">
 
         <div class="comment">
-
             {# compte le nombre de commentaires #}
-            {%  if comments|length > 0 %}
-            <div> There are {{ comments|length }} comments.</div>
-
-
-            {% for comment in comments %}
+            {% if comments|length > 0 %}
+                <div> There are {{ comments|length }} comments.</div>
                 <div class="row">
-                    <div class="col-sm-6 offset-sm-3">
-                        <div class="card bg-light">
-                            <div class="card-body my-4">
-                                <div class="d-flex justify-content-start">
-                                    <img src="https://robohash.org/YOUR-TEXT.png" height="50px" width="50px"
-                                         alt="Generic placeholder image" class="rounded-circle border border-dark"/>
-                                    <div class="d-flex justify-content-start"> {{ comment.user }} </div>
-                                </div>
-                                <hr>
-                                {{ comment.content | raw }}
-                                <hr>
-                                <div class="d-flex justify-content-end">
-                                    posted : {{ comment.date | format_datetime(locale='fr') }}
+                    <div class="col-sm-8 offset-sm-2">
+                        {% for comment in comments %}
+                            <div class="card bg-light">
+                                <div class="card-body my-20">
+                                    <div class="d-flex justify-content-start">
+                                        <img src="https://robohash.org/{{ comment.user.username }}" height="50px" width="50px"
+                                             alt="Generic placeholder image" class="rounded-circle border border-dark"/>
+                                        <div class="d-flex justify-content-start"> {{ comment.user }} </div>
+                                    </div>
+
+                                    <hr>
+                                    {{ comment.content | raw }}
+                                    <hr>
+                                    <div class="d-flex justify-content-end">
+                                        posted : {{ comment.date | format_datetime(locale='fr') }}
+
+                                    </div>
+                                    {% if is_granted("comment_delete", comment) %}
+                                        <a href="{{ path('comment_delete', {'commentId': comment.id, 'figureId': figure.id}) }}">
+                                            <button class="btn btn-danger btn-sm">Delete</button>
+                                        </a>
+                                    {% endif %}
 
                                 </div>
-                                {% if is_granted("comment_delete", comment) %}
-                                    <a href="{{ path('comment_delete', {'commentId': comment.id, 'figureId': figure.id}) }}">
-                                        <button class="btn btn-danger btn-sm">Delete</button>
-                                    </a>
-                                {% endif %}
-
                             </div>
-                        </div>
 
+                        {% endfor %}
                     </div>
                 </div>
-            {% endfor %}
             {% endif %}
-{# affiche la pagination #}
+
+            {# affiche la pagination #}
             {% if previous >=0 %}
-                <a href="{{ path('figure_show', {slug: figure.slug, offset: previous }) }}">Previous</a>
+                <div class="d-grid gap-2 d-md-flex justify-content-center">
+                    <a href="{{ path('figure_show', {slug: figure.slug, offset: previous }) }}">
+                        <i class="fas fa-angle-double-left"> Previous</i>
+                    </a>
+                </div>
             {% endif %}
             {% if next < comments|length %}
-                <a href="{{ path('figure_show', {slug: figure.slug, offset: next}) }}">Next</a>
+                <div class="d-grid gap-2 d-md-flex justify-content-center">
+                    <a href="{{ path('figure_show', {slug: figure.slug, offset: next}) }}">
+                        <i class="fas fa-angle-double-right">Next </i>
+                    </a>
+                </div>
             {% endif %}
-
         </div>
     </div>
-
-    <a class="btn btn-secondary btn-sm " href="{{ path('homepage') }}">Back</a>
 
 {% endblock %}
 
 {% block custom_scripts %}
-    <script src="{{ asset('js/hiddeFigureButton.js') }}"></script>
+    <script src="{{ asset('js/hiddenFigureButton.js') }}"></script>
 {% endblock %}

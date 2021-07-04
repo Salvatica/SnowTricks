@@ -48,7 +48,7 @@ class FigureController extends AbstractController
             $this->handleImages($form->get('files')->getData(), $figure);
             $entityManager->persist($figure);
             $entityManager->flush();
-            $this->addFlash("success", "L'ajout a bien été effectué");
+            $this->addFlash("success", "The addition has been made");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
@@ -59,6 +59,25 @@ class FigureController extends AbstractController
         ]);
     }
 // affichage d'une figure en utilisant "slug" pour l'url
+
+    /**
+     * @param $photos
+     * @param Figure $figure
+     */
+    private function handleImages($photos, $figure)
+    {
+        foreach ($photos as $photo) {
+            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
+            $fileName = $fileUploader->upload($photo);
+            $figureImage = new FigureImage;
+            $figureImage->setFileName($fileName);
+            /**
+             * @var Figure
+             */
+            $figure->addFigureImage($figureImage);
+        }
+    }
+//edition d'une figure
 
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, Environment $twig, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
@@ -82,13 +101,17 @@ class FigureController extends AbstractController
         return new Response($twig->render('figure/show.html.twig', [
             'figure' => $figure,
             'comments' => $paginator, // rajout
-            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE, // rajout
-            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE), // rajout
+            'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
+            'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
             'commentForm' => $form->createView()
         ]));
     }
-//edition d'une figure
 
+// Edition d'une photo
+
+    /**
+    * @IsGranted("ROLE_USER")
+    */
     #[Route('/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Figure $figure): Response
     {
@@ -96,7 +119,6 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
 
             $photos = $form->get('files')->getData();
             $this->handleImages($photos, $figure);
@@ -111,7 +133,7 @@ class FigureController extends AbstractController
             }
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("success", "La modification a bien été effectuée");
+            $this->addFlash("success", "The modification has been made");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
@@ -121,13 +143,14 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+// Edition d'une vidéo
 
-// Edition d'une photo
     /**
      * @param Request $request
      * @param FigureImage $figureImage
      * @return Response
      * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
+     * @IsGranted("ROLE_USER")
      */
     #[Route('/editOnePhoto/{imageId}', name: 'figure_editOnePhoto', methods: ['GET', 'POST'])]
     public function editOnePhoto(Request $request, FigureImage $figureImage): Response
@@ -144,7 +167,7 @@ class FigureController extends AbstractController
             $figureImage->setFigure($figure);
 
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("success", "La modification a bien été effectuée");
+            $this->addFlash("success", "The modification has been made");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
@@ -155,9 +178,12 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-// Edition d'une vidéo
+
+// suppression d'une figure
+
     /**
      * @ParamConverter("figureVideo", options={"mapping": {"videoId":"id"}})
+     * @IsGranted("ROLE_USER")
      */
     #[Route('/editOneVideo/{videoId}', name: 'figure_editOneVideo', methods: ['GET', 'POST'])]
     public function editOneVideo(Request $request, FigureVideo $figureVideo): Response
@@ -168,7 +194,7 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->getDoctrine()->getManager()->flush();
-            $this->addFlash("success", "La modification a bien été effectuée");
+            $this->addFlash("success", "The modification has been made");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
         }
@@ -179,7 +205,12 @@ class FigureController extends AbstractController
         ]);
     }
 
-// suppression d'une figure
+    /**
+     * @param Request $request
+     * @param Figure $figure
+     * @return Response
+     * @IsGranted("ROLE_USER")
+     */
     #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Figure $figure): Response
     {
@@ -187,37 +218,20 @@ class FigureController extends AbstractController
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($figure);
             $entityManager->flush();
-            $this->addFlash("success", "La suppression a bien été effectuée");
+            $this->addFlash("success", "The deletion was successful");
         }
 
         return $this->redirectToRoute('homepage');
     }
 
-    /**
-     * @param $photos
-     * @param Figure $figure
-     */
-    private function handleImages($photos, $figure)
-    {
-        foreach ($photos as $photo) {
-            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
-            $fileName = $fileUploader->upload($photo);
-            $figureImage = new FigureImage;
-            $figureImage->setFileName($fileName);
-            /**
-             * @var Figure
-             */
-            $figure->addFigureImage($figureImage);
-        }
-    }
-
     // suppression d'une photo
+
     /**
      * @param Request $request
      * @param Figure $figure
      * @param FigureImage $figureImage
      * @return Response
-     *
+     * @IsGranted("ROLE_USER")
      * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
      * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
      */
@@ -232,25 +246,12 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
 
-
-    /**
-     * @param $videos
-     * @param Figure $figure
-     */
-    private function handleVideos($videos, $figure)
-    {
-        foreach ($videos as $video) {
-            $figure->addFigureVideo($video);
-        }
-    }
-// suppression d'une vidéo
-
     /**
      * @param Request $request
      * @param Figure $figure
      * @param FigureVideo $figureVideo
      * @return Response
-     *
+     * @IsGranted("ROLE_USER")
      * @ParamConverter("figure", options={"mapping": {"figureId": "id"}})
      * @ParamConverter("figureVideo", options={"mapping": {"videoId": "id"}})
      */
@@ -265,8 +266,8 @@ class FigureController extends AbstractController
 
         return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
+// suppression d'une vidéo
 
-    // suppression d'un commentaire par son auteur
     /**
      * @param Request $request
      * @param Figure $figure
@@ -282,9 +283,22 @@ class FigureController extends AbstractController
         $entityManager = $this->getDoctrine()->getManager();
         $figure->removeComment($comment);
         $entityManager->flush();
-        $this->addFlash("success", "La suppression a bien été effectuée");
+        $this->addFlash("success", "The deletion was successful");
 
 
         return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
+    }
+
+    // suppression d'un commentaire par son auteur
+
+    /**
+     * @param $videos
+     * @param Figure $figure
+     */
+    private function handleVideos($videos, $figure)
+    {
+        foreach ($videos as $video) {
+            $figure->addFigureVideo($video);
+        }
     }
 }

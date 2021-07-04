@@ -33,8 +33,6 @@ class FigurePhotoType extends AbstractType
                 'label' => 'Image',
                 'mapped' => false,
                 'required' => false]);
-
-
     }
 
     public function configureOptions(OptionsResolver $resolver)

@@ -16,7 +16,7 @@ use Doctrine\ORM\Tools\Pagination\Paginator;
  */
 class CommentRepository extends ServiceEntityRepository
 {
-    public const PAGINATOR_PER_PAGE = 5; // nombre de commentaires par pages
+    public const PAGINATOR_PER_PAGE = 10; // nombre de commentaires par pages
 
     public function __construct(ManagerRegistry $registry)
     {

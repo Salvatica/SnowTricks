@@ -4,11 +4,10 @@
 
 {% block body %}
     <div>
-
-        <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
-
+        <img src="{{ asset('uploads/photos/' ~ figure.figureImages[0]) }}" class="img-fluid w-100" alt="Responsive image">
         <div class="position">
             <div class="float-right">
+
                 <a href="{{ path('figure_edit', {'id': figure.id}) }}">
                     <i class="far fa-edit"></i>
                 </a>
@@ -16,25 +15,26 @@
                 </button>
             </div>
         </div>
-
     </div>
-    <div class="container-fluid">  {# insert image #}
-        <div class="row">
+
+    <div class="container-fluid">{# insert image #}
+            <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias
+            </button>
+        <div class="row" id="figure-medias-list">
+
             {% for photo in figure.figureImages %}
                 <div class="col-md-2 photo-list embed-responsive-16by9">
                     <div class="card mb-4 box-shadow">
-                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" alt="...">
+                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" >
 
                         <div class="position">
                             <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
                                class="float-right">
                                 <i class="far fa-edit"></i>
-
                             </a>
                             <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                             </a>
-
                         </div>
                     </div>
                 </div>
@@ -54,20 +54,15 @@
                             <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}"
                                class="float-right">
                                 <i class="far fa-edit"></i>
-
                             </a>
                             <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
                                 <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                             </a>
-
                         </div>
-
                     </div>
                 </div>
             {% endfor %}
-
         </div>
-    </div>
     </div>
 
     <div class="row"> {# form for modify text, image and video #}
@@ -75,20 +70,15 @@
         <div class="col-sm-6 offset-sm-2">
             {{ form_start(form) }}
 
-
             {{ form_row(form.name) }}
-
 
             {{ form_row(form.description) }}
 
-
             <div class="form-floating mb-4">
                 <div class="row">
-
                     <div class="col-sm-4">
                         {{ form_row(form.category) }}
                     </div>
-
                 </div>
 
                 {{ form_row(form.files, {'attr': {'placeholder': "images"}}) }}
@@ -96,6 +86,7 @@
                 <div class="figureVideos"
                      data-prototype="{{ form_widget(form.figureVideos.vars.prototype)|e('html_attr') }}">
                     {% for formVideo in form.figureVideos %}
+
                         <div class="figureVideo">{{ form_row(formVideo.fileName) }}</div>
 
                     {% endfor %}
@@ -108,17 +99,21 @@
             <div class="d-grid gap-2 d-md-flex justify-content-md-end">
                 <button class="btn btn-danger btn-sm" form="trickDeleteForm">Delete</button>
                 <button class="btn btn-primary btn-sm">{{ button_label|default('Validate') }}</button>
-
             </div>
             {{ form_end(form) }}
-
         </div>
-
-
     </div>
+    <script src="{{ asset('js/hiddenFigureButton.js') }}"></script>
 {% endblock %}
+
+
+
+
+
 {% block custom_scripts %}
+
     <script>
+
         //  deleteButton
         function addFormToCollection($collectionHolderClass) {
             // Get the ul that holds the collection of tags
@@ -150,9 +145,8 @@
             addFormDeleteLink($newFormLi);
         }
 
-
         function addFormDeleteLink($entry) {
-            var $removeFormButton = $('<button type="button" class="float-right">Supprimer</button>');
+            var $removeFormButton = $('<button type="button" class="btn btn-danger btn-sm float-right">Delete video</button>');
             $entry.append($removeFormButton);
 
             $removeFormButton.on('click', function (e) {
@@ -181,8 +175,7 @@
                 addFormToCollection($collectionHolderClass);
             })
         });
-
     </script>
 
-
 {% endblock %}
+

@@ -29,12 +29,10 @@ class FigureImage
      */
     private $figure;
 
-
     public function __toString(): string
     {
         return $this->getFileName();
     }
-
 
     public function getId(): ?int
     {
@@ -64,6 +62,5 @@ class FigureImage
 
         return $this;
     }
-
 
 }

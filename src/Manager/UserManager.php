@@ -12,8 +12,6 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserManager
 {
-
-
     public function __construct(
         private EntityManagerInterface $entityManager,
         private UserPasswordEncoderInterface $passwordEncoder,
@@ -46,7 +44,6 @@ class UserManager
 
     }
 
-
     public function forgotPass(User $user)
     {
         $token = md5(uniqid());
@@ -58,7 +55,6 @@ class UserManager
 
         $this->appMailer->sendForgottenMail($user);
         return $url;
-
     }
 
     public function resetPass(User $user)

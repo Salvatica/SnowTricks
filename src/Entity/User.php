@@ -47,7 +47,6 @@ class User implements UserInterface
      */
     private array $roles = [];
 
-
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="user")
      */
@@ -63,7 +62,6 @@ class User implements UserInterface
      */
     private $reset_token;
 
-
     public function __construct()
     {
         $this->comments = new ArrayCollection();
@@ -75,7 +73,6 @@ class User implements UserInterface
     {
         return $this->getName();
     }
-
 
     public function getId(): ?int
     {
@@ -146,7 +143,6 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
-
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -159,7 +155,6 @@ class User implements UserInterface
         $this->roles[] = $role;
         return $this;
     }
-
 
     /**
      * @return Collection|Comment[]
@@ -191,7 +186,6 @@ class User implements UserInterface
         return $this;
     }
 
-
     /**
      * Returning a salt is only needed, if you are not using a modern
      * hashing algorithm (e.g. bcrypt or sodium) in your security.yaml.
@@ -202,7 +196,6 @@ class User implements UserInterface
     {
         return null;
     }
-
 
     /**
      * @see UserInterface
@@ -237,6 +230,5 @@ class User implements UserInterface
 
         return $this;
     }
-
 
 }

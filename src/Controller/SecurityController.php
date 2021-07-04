@@ -55,7 +55,7 @@ class SecurityController extends AbstractController
     public function activation(User $user, UserManager $manager)
     {
         $manager->activate($user);
-        $this->addFlash('message', 'Vous avez bien activé votre compte');
+        $this->addFlash('message', 'You have successfully activated your account');
 
         return $this->redirectToRoute('homepage');
     }
@@ -85,24 +85,21 @@ class SecurityController extends AbstractController
         $form = $this->createForm(ResetPassType::class);
         $form->handleRequest($request);
 
-        // si le formulaire est valide
         if ($form->isSubmitted() && $form->isValid()) {
-            // on réécupère les donnees
             $data = $form->getData();
             // on cherche si un utilisateur a cet email
             $user = $userRepo->findOneByEmail($data['email']);
             //si l'utilisateur n'existe pas
             if (!$user) {
-                $this->addFlash('danger', 'cette adresse n\' existe pas');
+                $this->addFlash('danger', 'this email doesn\'t exist');
                 return $this->redirectToRoute('app_login');
             }
             $userManager->forgotPass($user);
 
-            // on créé le message flash
-            $this->addFlash('message', 'un Email de réinitialisation de mot de passe vous a été envoyé');
+            $this->addFlash('message', 'a password reset email has been sent to you');
             return $this->redirectToRoute('app_login');
         }
-        // on envoie vers la page de demande d'email
+        // envoie vers la page de demande d'email
         return $this->render('security/forgottenPasswordForm.html.twig', ['emailForm' => $form->createView()]);
 
     }
@@ -110,24 +107,23 @@ class SecurityController extends AbstractController
     #[Route('/reset-pass/{token}', name: 'app_reset_password')]
     public function resetPassword($token, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        // on va chercher l'utilisateur avec le token fourni
+        // va chercher l'utilisateur avec le token fourni
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['reset_token' => $token]);
         if (!$user) {
-            $this->addFlash('danger', 'Token inconnu');
+            $this->addFlash('danger', 'Unknown Token');
             return $this->redirectToRoute('app_login');
         }
-        // on verifie si le fomulaire est envoyé en méthode post
+        // verifie si le fomulaire est envoyé en méthode post et on supprime le token
         if ($request->isMethod('POST')) {
-            // on supprime le token
             $user->setResetToken(null);
 
-            // on chiffre le mdp
+            // chiffre le mdp
             $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            $this->addFlash('message', 'Mot de passe modifié avec succès');
+            $this->addFlash('message', 'Password changed successfully');
 
             return $this->redirectToRoute('app_login');
 
