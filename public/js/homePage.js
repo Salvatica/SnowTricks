@@ -1,11 +1,9 @@
-$('#deleteModal').on('show.bs.modal', function (e) {
-    console.log(e.relatedTarget);
+$("#deleteModal").on("show.bs.modal", function (e) {
+    $(this).find(".btn-ok").attr("href", $(e.relatedTarget).data("href"));
 
-    $(this).find('.btn-ok').attr('href', $(e.relatedTarget).data('href'));
-
-    $('.debug-url').html('Delete URL:  <strong>' + $(this).find('.btn-ok').attr('href') + '</strong>');
+    $(".debug-url").html("Delete URL:  <strong>" + $(this).find(".btn-ok").attr("href") + "</strong>");
 });
-$('.one-figure').hide();
+$(".one-figure").hide();
 
 
 function showMoreFigure(count = 4) {
@@ -15,9 +13,9 @@ function showMoreFigure(count = 4) {
 showMoreFigure(12)
 
 
-$('#loadMore').click(function () {
+$("#loadMore").click(function () {
     showMoreFigure()
-    let remainingFigures = $('.one-figure:hidden').length;
+    let remainingFigures = $(".one-figure:hidden").length;
     if (remainingFigures === 0) {
         $(this).hide();
     }

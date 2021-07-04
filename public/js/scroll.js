@@ -1,4 +1,4 @@
-$('.anchor-scroll').anchorScroll({
+$(".anchor-scroll").anchorScroll({
     scrollSpeed: 800, // scroll speed
     offsetTop: 0, // offset for fixed top bars (defaults to 0)
     onScroll: function () {
@@ -9,13 +9,13 @@ $('.anchor-scroll').anchorScroll({
     }
 });
 
-//Permet d'afficher' le bouton "flèche du haut" en dessous de 800px
+//Permet d"afficher" le bouton "flèche du haut" en dessous de 800px
 $(document).scroll(function () {
     var y = $(this).scrollTop();
     if (y > 800) {
-        $('.floatnav-bottom').fadeIn();
+        $(".floatnav-bottom").fadeIn();
     } else {
-        $('.floatnav-bottom').fadeOut();
+        $(".floatnav-bottom").fadeOut();
     }
 });
 
