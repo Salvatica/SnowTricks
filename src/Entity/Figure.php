@@ -65,12 +65,12 @@ class Figure
     private $update_date;
 
     /**
-     * @ORM\OneToMany(targetEntity=FigureImage::class, mappedBy="figure", orphanRemoval=true, cascade="persist")
+     * @ORM\OneToMany(targetEntity=FigureImage::class, mappedBy="figure", orphanRemoval=true, cascade={"persist"})
      */
     private $figureImages;
 
     /**
-     * @ORM\OneToMany(targetEntity=FigureVideo::class, mappedBy="figure", orphanRemoval=true, cascade="persist")
+     * @ORM\OneToMany(targetEntity=FigureVideo::class, mappedBy="figure", orphanRemoval=true, cascade={"persist"})
      */
     #[Valid()]
     private $figureVideos;
