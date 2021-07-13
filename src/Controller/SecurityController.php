@@ -96,26 +96,18 @@ class SecurityController extends AbstractController
     }
 
     #[Route('/reset-pass/{token}', name: 'app_reset_password')]
-    public function resetPassword($token, Request $request, UserPasswordEncoderInterface $passwordEncoder)
+    public function resetPassword($token, Request $request, UserPasswordEncoderInterface $passwordEncoder, UserManager $userManager)
     {
         // va chercher l'utilisateur avec le token fournit
-        $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['reset_token' => $token]);
+        $user = $userManager->loadUserByResetToken($token);
         if (!$user) {
             $this->addFlash('danger', 'Unknown Token');
             return $this->redirectToRoute('app_login');
         }
-        // verifie si le fomulaire est envoyé en méthode post et on supprime le token
+        // verifie si le fomulaire est envoyé en méthode post et on change le mdp
         if ($request->isMethod('POST')) {
-            $user->setResetToken(null);
-
-            // chiffre le mdp
-            $user->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
-            $entityManager->flush();
-
+            $userManager->resetPass($user, $request->get('password'));
             $this->addFlash('message', 'Password changed successfully');
-
             return $this->redirectToRoute('app_login');
 
         } else {

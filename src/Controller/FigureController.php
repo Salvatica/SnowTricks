@@ -10,6 +10,7 @@ use App\Form\CommentType;
 use App\Form\FigurePhotoType;
 use App\Form\FigureType;
 use App\Form\FigureVideoType;
+use App\Manager\FigureManager;
 use App\Repository\CommentRepository;
 use App\Service\FileUploader;
 use App\Service\VideoLinkSanitizer;
@@ -26,8 +27,11 @@ use Twig\Environment;
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
-    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer, private FileUploader $fileUploader )
+    private $figureManager;
+
+    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer, private FileUploader $fileUploader, FigureManager $manager)
     {
+        $this->figureManager = $manager;
     }
 
     /**
@@ -44,7 +48,7 @@ class FigureController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $this->handleImages($form->get('files')->getData(), $figure);
+            $this->figureManager->handleImages($form->get('files')->getData(), $figure);
             $entityManager->persist($figure);
             $entityManager->flush();
             $this->addFlash("success", "The addition has been made");
@@ -58,19 +62,6 @@ class FigureController extends AbstractController
         ]);
     }
 
-    /**
-     * @param $photos
-     * @param Figure $figure
-     */
-    private function handleImages($photos,Figure $figure)
-    {
-        foreach ($photos as $photo) {
-            $fileName = $this->fileUploader->upload($photo);
-            $figureImage = new FigureImage;
-            $figureImage->setFileName($fileName);
-            $figure->addFigureImage($figureImage);
-        }
-    }
 
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
@@ -113,7 +104,7 @@ class FigureController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
 
             $photos = $form->get('files')->getData();
-            $this->handleImages($photos, $figure);
+            $this->figureManager->handleImages($photos, $figure);
             $figureVideos = $form->get('figureVideos')->getData();
             /**
              * @Var FigureVideo $figureVideo
@@ -154,11 +145,7 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $form->get('file')->getData();
-            $fileName = $fileUploader->upload($photo);
-            $figureImage->setFileName($fileName);
-            $figureImage->setFigure($figure);
-
-            $this->getDoctrine()->getManager()->flush();
+            $this->figureManager->savePhoto($figure, $figureImage, $photo);
             $this->addFlash("success", "The modification has been made");
 
             return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
