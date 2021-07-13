@@ -4,7 +4,11 @@
 
 {% block body %}
     <div>
-        <img src="{{ asset('uploads/photos/' ~ figure.figureImages[0]) }}" class="img-fluid w-100" alt="Responsive image">
+        {% if figure.figureImages|first %}
+            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100" alt="Responsive image">
+        {% else %}
+            <img src="{{ asset('images/exemple.jpeg')}}" class="img-fluid w-100" alt="Responsive image">
+        {% endif %}
         <div class="position">
             <div class="float-right">
 
@@ -20,49 +24,52 @@
     <div class="container-fluid">{# insert image #}
             <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias
             </button>
-        <div class="row d-none" id="figure-medias-list">
+        <section id="figure-medias-list" class="d-none d-sm-block">
+            <div class="row">
+                {% for photo in figure.figureImages %}
+                    <div class="col-sm-2 photo-list embed-responsive-16by9">
+                        <div class="card mb-4 box-shadow">
+                            <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail">
 
-            {% for photo in figure.figureImages %}
-                <div class="col-md-2 photo-list embed-responsive-16by9">
-                    <div class="card mb-4 box-shadow">
-                        <img src="{{ asset('uploads/photos/' ~ photo) }}" class="img-thumbnail" >
-
-                        <div class="position">
-                            <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
-                               class="float-right">
-                                <i class="far fa-edit"></i>
-                            </a>
-                            <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
-                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                            </a>
+                            <div class="position">
+                                <a href="{{ path('figure_editOnePhoto', {'id': figure.id, 'imageId': photo.id}) }}"
+                                   class="float-right">
+                                    <i class="far fa-edit"></i>
+                                </a>
+                                <a href="{{ path('image_delete', {'figureId': figure.id, 'imageId': photo.id} ) }}">
+                                    <i class="btn fas fa-trash-alt " data-toggle="modal"
+                                       data-target="#exampleModal"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
 
-            {% for video in figure.figureVideos %} {# insert video #}
-                <div class="col-md-2 video-list embed-responsive-16by9">
-                    <div class="card mb-4 box-shadow">
+                {% for video in figure.figureVideos %} {# insert video #}
+                    <div class="col-md-2 video-list embed-responsive-16by9">
+                        <div class="card mb-4 box-shadow">
 
-                        <iframe
-                                src="{{ video.fileName }}"
-                                title="YouTube video player" frameborder="0"
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                                allowfullscreen>
-                        </iframe>
-                        <div class="position">
-                            <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}"
-                               class="float-right">
-                                <i class="far fa-edit"></i>
-                            </a>
-                            <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
-                                <i class="btn fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
-                            </a>
+                            <iframe
+                                    src="{{ video.fileName }}"
+                                    title="YouTube video player" frameborder="0"
+                                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen>
+                            </iframe>
+                            <div class="position">
+                                <a href="{{ path('figure_editOneVideo', {'id': figure.id, 'videoId' : video.id}) }}"
+                                   class="float-right">
+                                    <i class="far fa-edit"></i>
+                                </a>
+                                <a href="{{ path('video_delete', {'figureId': figure.id, 'videoId': video.id} ) }}">
+                                    <i class="btn fas fa-trash-alt " data-toggle="modal"
+                                       data-target="#exampleModal"></i>
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        </section>
     </div>
 
     <div class="row"> {# form for modify text, image and video #}

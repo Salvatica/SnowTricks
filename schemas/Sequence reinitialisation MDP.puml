@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+[o-> User: Connexion
+
+autonumber 1.1.1
+User -> Site_internet: Demande formulaire réinitialisation mot de passe
+activate User
+activate Site_internet
+Site_internet-> User: affiche le formulaire
+User->Site_internet: saisie son email
+
+autonumber 2.1.1
+activate database
+Site_internet->database: enregistre un token temporaire
+Site_internet -> User : envoie un mail avec token temporaire
+User->Site_internet: click sur le lien
+Site_internet->database: cherche user avec ce token
+alt user existe
+Site_internet->User: affiche formulaire changement MDP
+User->Site_internet: saisie nouveau MDP et valide
+Site_internet->database: enregistre nouveau MDP
+Site_internet->User: affiche la page login
+else user n'existe pas
+Site_internet->User: redirection page login avec message erreur
+end
+@enduml

@@ -1,0 +1,20 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+[o-> User: Connexion
+
+autonumber 1.1.1
+User -> Site_internet: Demande page figure
+activate User
+activate Site_internet
+Site_internet-> User: affiche page figure avec le formulaire commentaire
+
+autonumber 2.1
+User->Site_internet: complète le commentaire et le soumet
+activate database
+Site_internet -> database : ajoute le commentaire
+database->Site_internet: ok commentaire ajouté
+
+Site_internet -> User: affiche le commentaire
+@enduml

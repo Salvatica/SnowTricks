@@ -7,11 +7,9 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
 
 class FileUploader
 {
-    private $targetDir;
 
-    public function __construct($targetDir)
+    public function __construct(private string $targetDir)
     {
-        $this->targetDir = $targetDir;
     }
 
     public function upload(UploadedFile $file)

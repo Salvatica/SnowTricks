@@ -57,8 +57,9 @@ class UserManager
         return $url;
     }
 
-    public function resetPass(User $user)
+    public function resetPass()
     {
 
     }
+
 }

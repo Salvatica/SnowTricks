@@ -1,0 +1,25 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+
+
+autonumber 1.1.1
+User -> Site_internet: Demande formulaire de connexion
+activate User
+activate Site_internet
+Site_internet-> User: affiche le formulaire de connexion
+User->Site_internet: complète le formulaire et le soumet
+
+autonumber 2.1.1
+
+Site_internet -> Site_internet : encode le password
+Site_internet -> database : verifie si mdp encodé = mdp database
+
+alt user existe
+database->Site_internet : password ok
+Site_internet->User: affiche la page d'accueil
+else user n'existe pas
+database->Site_internet : password non Ok
+Site_internet->User : message d'erreur
+end
+@enduml

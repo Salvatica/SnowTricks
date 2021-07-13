@@ -26,11 +26,10 @@ use Twig\Environment;
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
-    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer)
+    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer, private FileUploader $fileUploader )
     {
     }
 
-// création d'une nouvelle figure
     /**
      * @param Request $request
      * @param EntityManagerInterface $entityManager
@@ -58,56 +57,49 @@ class FigureController extends AbstractController
 
         ]);
     }
-// affichage d'une figure en utilisant "slug" pour l'url
 
     /**
      * @param $photos
      * @param Figure $figure
      */
-    private function handleImages($photos, $figure)
+    private function handleImages($photos,Figure $figure)
     {
         foreach ($photos as $photo) {
-            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
-            $fileName = $fileUploader->upload($photo);
+            $fileName = $this->fileUploader->upload($photo);
             $figureImage = new FigureImage;
             $figureImage->setFileName($fileName);
-            /**
-             * @var Figure
-             */
             $figure->addFigureImage($figureImage);
         }
     }
-//edition d'une figure
 
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
-    public function show(Request $request, Environment $twig, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
+    public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
     {
         $offset = max(0, $request->query->getInt('offset', 0));// pagination comments
         $paginator = $commentRepository->getCommentPaginator($figure, $offset);
 
-        $comment = new Comment();
-        $user = $this->getUser();
-        $comment->setUser($user);
 
-        $form = $this->createForm(CommentType::class, $comment);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $comment->setFigure($figure);
-            $entityManager->persist($comment);
-            $entityManager->flush();
-            return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
+        $form = $this->createForm(CommentType::class);
+        if($this->getUser()){
+            $form->handleRequest($request);
+            if ($form->isSubmitted() && $form->isValid()) {
+                $comment = $form->getData();
+                $comment->setFigure($figure);
+                $comment->setUser($this->getUser());
+                $entityManager->persist($comment);
+                $entityManager->flush();
+                return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
+            }
         }
-        return new Response($twig->render('figure/show.html.twig', [
+
+        return $this->render('figure/show.html.twig', [
             'figure' => $figure,
-            'comments' => $paginator, // rajout
+            'comments' => $paginator,
             'previous' => $offset - CommentRepository::PAGINATOR_PER_PAGE,
             'next' => min(count($paginator), $offset + CommentRepository::PAGINATOR_PER_PAGE),
             'commentForm' => $form->createView()
-        ]));
+        ]);
     }
-
-// Edition d'une photo
 
     /**
     * @IsGranted("ROLE_USER")
@@ -143,17 +135,18 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-// Edition d'une vidéo
+
 
     /**
      * @param Request $request
      * @param FigureImage $figureImage
+     * @param FileUploader $fileUploader
      * @return Response
      * @ParamConverter("figureImage", options={"mapping": {"imageId": "id"}})
      * @IsGranted("ROLE_USER")
      */
     #[Route('/editOnePhoto/{imageId}', name: 'figure_editOnePhoto', methods: ['GET', 'POST'])]
-    public function editOnePhoto(Request $request, FigureImage $figureImage): Response
+    public function editOnePhoto(Request $request, FigureImage $figureImage, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(FigurePhotoType::class, $figureImage);
         $form->handleRequest($request);
@@ -161,7 +154,6 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $photo = $form->get('file')->getData();
-            $fileUploader = new FileUploader($this->getParameter('kernel.project_dir') . "/public/uploads/photos");
             $fileName = $fileUploader->upload($photo);
             $figureImage->setFileName($fileName);
             $figureImage->setFigure($figure);
@@ -178,8 +170,6 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
-// suppression d'une figure
 
     /**
      * @ParamConverter("figureVideo", options={"mapping": {"videoId":"id"}})
@@ -224,8 +214,6 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('homepage');
     }
 
-    // suppression d'une photo
-
     /**
      * @param Request $request
      * @param Figure $figure
@@ -266,7 +254,7 @@ class FigureController extends AbstractController
 
         return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
     }
-// suppression d'une vidéo
+
 
     /**
      * @param Request $request
@@ -289,7 +277,6 @@ class FigureController extends AbstractController
         return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
     }
 
-    // suppression d'un commentaire par son auteur
 
     /**
      * @param $videos

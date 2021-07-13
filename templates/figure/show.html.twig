@@ -23,7 +23,11 @@
     </div>
 
     <div>
-        <img src="{{ asset('uploads/photos/' ~ figure.figureImages[0]) }}" class="img-fluid w-100" alt="Responsive image">
+        {% if figure.figureImages|first %}
+            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100" alt="Responsive image">
+        {% else %}
+            <img src="{{ asset('images/exemple.jpeg')}}" class="img-fluid w-100" alt="Responsive image">
+        {% endif %}
     </div>
 
     <div class="container-fluid ">
@@ -80,7 +84,7 @@
         {# gestion des commentaires #}
         <section id="commentaires">
 
-            {% if app.user %}
+            {% if is_granted('ROLE_USER') %}
                 {{ form_start(commentForm) }}
                 <div class="row">
                     <div class="col-sm-6 offset-sm-3"{{ form_row(commentForm.content, {'attr': {'placeholder': "Your comment"}}) }}
@@ -91,9 +95,7 @@
                 </div>
 
                 {{ form_end(commentForm) }}
-
             {% else %}
-
                 <h6>You can't comment if you are not connected</h6>
                 <a href="{{ path('app_login') }}" class="btn btn-primary">Connect</a>
             {% endif %}

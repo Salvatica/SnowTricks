@@ -8,8 +8,7 @@
                 <div class="jumbotron jumbotron-fluid">
                     <div class="container">
                         <h1 class="display-4">Snow Tricks</h1>
-                        <p class="lead">This is a modified jumbotron that occupies the entire horizontal space of its
-                            parent.</p>
+                        <p class="lead">Snowboard tricks are aerials or maneuvers performed on snowboards for fun, or in competitions.</p>
                         <div class="navarrow bottomright text-white">
                             <a class="anchor-scroll" href="#trick"
                                data-class-to="trick" data-on-scroll="blur-effect">
@@ -25,7 +24,14 @@
                         {% for figure in figures %}
                             <div class="col-md-3 one-figure"><!-- FIGURE -->
                                 <div class="card mb-4 box-shadow">
-                                    <img class="card-img-top" src="{{ asset('images/exemple.jpeg') }}" alt="Card image cap">
+                                    <div class="embed-responsive embed-responsive-16by9">
+                                    {% if figure.figureImages|first %}
+                                        <img class="card-img-top embed-responsive-item" src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" alt="Card image cap">
+                                    {% else %}
+                                        <img class="card-img-top embed-responsive-item" src="{{ asset('images/exemple.jpeg')}}" alt="Card image cap">
+                                    {% endif %}
+                                    </div>
+
                                         <div class="card-body">
                                             <div class="row justify-content-around">
                                             <strong><a href="{{ path('figure_show', {'slug': figure.slug}) }}">{{ figure.name }}</a></strong>

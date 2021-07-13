@@ -98,7 +98,7 @@ class SecurityController extends AbstractController
     #[Route('/reset-pass/{token}', name: 'app_reset_password')]
     public function resetPassword($token, Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
-        // va chercher l'utilisateur avec le token fourni
+        // va chercher l'utilisateur avec le token fournit
         $user = $this->getDoctrine()->getRepository(User::class)->findOneBy(['reset_token' => $token]);
         if (!$user) {
             $this->addFlash('danger', 'Unknown Token');
