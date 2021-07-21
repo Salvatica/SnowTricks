@@ -19,8 +19,6 @@
 </head>
 <body>
 <header>
-
-
     <nav id="navbarHeader" class="navbar navbar-expand-lg navbar-dark bg-dark"><!-- NAVBAR -->
         <a class="navbar-brand" href="{{ path('homepage') }}">SNOW TRICKS</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -54,7 +52,6 @@
             </ul>
         </div>
     </nav><!-- END NAVBAR -->
-
 </header>
 {% for message in app.flashes('success') %}
     <div class="alert alert-success alert-dismissible fade show" role="alert">
@@ -66,22 +63,15 @@
 
 {% endfor %}
 
-
-
-
 {% block body %}
-
 
 {% endblock %}
 
 <footer class="text-center">
 
     <div class="bg-dark">
-
-        <p>Album example is &copy; Bootstrap, but please download and customize it for yourself!</p>
-        <p>New to Bootstrap? <a href="../../">Visit the homepage</a> or read our <a href="../../getting-started/">getting
-                started guide</a>.</p>
-
+        <p>Created By Florence Grisot</p>
+        <p>For OpenClassrooms</p>
     </div>
 
 </footer>

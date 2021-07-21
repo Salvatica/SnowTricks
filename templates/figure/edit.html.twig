@@ -5,26 +5,28 @@
 {% block body %}
     <div>
         {% if figure.figureImages|first %}
-            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100" alt="Responsive image">
+            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100"
+                 alt="Responsive image">
         {% else %}
-            <img src="{{ asset('images/exemple.jpeg')}}" class="img-fluid w-100" alt="Responsive image">
+            <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
         {% endif %}
         <div class="position">
             <div class="float-right">
 
-                <a href="{{ path('figure_edit', {'id': figure.id}) }}">
+                <a href="{{ path('figure_edit', {'slug': figure.slug}) }}">
                     <i class="far fa-edit"></i>
                 </a>
-                <button class="btn"><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
+                <button class="btn "><i class="fas fa-trash-alt " data-toggle="modal" data-target="#exampleModal"></i>
                 </button>
             </div>
         </div>
     </div>
 
     <div class="container-fluid">{# insert image #}
-            <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias
-            </button>
+        <button type="button" id="button-toggle-medias-list" class="btn btn-secondary d-block d-sm-none ">See medias
+        </button>
         <section id="figure-medias-list" class="d-none d-sm-block">
+
             <div class="row">
                 {% for photo in figure.figureImages %}
                     <div class="col-sm-2 photo-list embed-responsive-16by9">
@@ -75,6 +77,7 @@
     <div class="row"> {# form for modify text, image and video #}
 
         <div class="col-sm-6 offset-sm-2">
+            <h2>Edit Figure</h2>
             {{ form_start(form) }}
 
             {{ form_row(form.name) }}

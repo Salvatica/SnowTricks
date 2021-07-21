@@ -35,18 +35,15 @@ class Figure
      */
     private mixed $slug;
 
-
     /**
      * @ORM\Column(type="text")
      */
     private $description;
 
-
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="figure", cascade={"persist","remove"})
      */
     private $comments;
-
 
     /**
      * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="figure")
@@ -75,10 +72,8 @@ class Figure
     #[Valid()]
     private $figureVideos;
 
-
     public function __construct()
     {
-
         $this->comments = new ArrayCollection();
         $this->created_at = new \DateTime();
         $this->update_date = new \DateTime();
@@ -99,7 +94,6 @@ class Figure
     public function setName(string $name): self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -127,7 +121,6 @@ class Figure
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
         return $this;
     }
 
@@ -145,7 +138,6 @@ class Figure
             $this->comments[] = $comment;
             $comment->setFigure($this);
         }
-
         return $this;
     }
 
@@ -157,7 +149,6 @@ class Figure
                 $comment->setFigure(null);
             }
         }
-
         return $this;
     }
 
@@ -169,7 +160,6 @@ class Figure
     public function setCategory(?Category $category): self
     {
         $this->category = $category;
-
         return $this;
     }
 
@@ -181,7 +171,6 @@ class Figure
     public function setCreatedAt(\DateTimeInterface $created_at): self
     {
         $this->created_at = $created_at;
-
         return $this;
     }
 
@@ -193,7 +182,6 @@ class Figure
     public function setUpdateDate(\DateTimeInterface $update_date): self
     {
         $this->update_date = $update_date;
-
         return $this;
     }
 
@@ -211,7 +199,6 @@ class Figure
             $this->figureImages[] = $figureImage;
             $figureImage->setFigure($this);
         }
-
         return $this;
     }
 
@@ -223,7 +210,6 @@ class Figure
                 $figureImage->setFigure(null);
             }
         }
-
         return $this;
     }
 
@@ -241,7 +227,6 @@ class Figure
             $this->figureVideos[] = $figureVideo;
             $figureVideo->setFigure($this);
         }
-
         return $this;
     }
 
@@ -253,10 +238,8 @@ class Figure
                 $figureVideo->setFigure(null);
             }
         }
-
         return $this;
     }
-
 
     /**
      * @ORM\PreUpdate()

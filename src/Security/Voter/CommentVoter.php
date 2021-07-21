@@ -14,8 +14,6 @@ class CommentVoter extends Voter
 
     protected function supports($attribute, $comment)
     {
-        // replace with your own logic
-        // https://symfony.com/doc/current/security/voters.html
         return in_array($attribute, [self::COMMENT_DELETE])
             && $comment instanceof \App\Entity\Comment;
     }
@@ -27,8 +25,6 @@ class CommentVoter extends Voter
         if (!$user instanceof UserInterface) {
             return false;
         }
-// on vérifie si le commentaire à un propriétaire
-        if (null === $comment->getUser()) return false;
 
         // ... (check conditions and return true to grant permission) ...
         switch ($attribute) {

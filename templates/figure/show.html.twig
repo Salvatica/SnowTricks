@@ -6,8 +6,8 @@
 
     {% if app.user %}
         <div class="entete">
-            <div class="position-absolute d-flex">
-        <a class="btn" href="{{ path('figure_edit', {'id': figure.id}) }}">
+        <div class="position-absolute d-flex">
+        <a class="btn" href="{{ path('figure_edit', {'slug': figure.slug}) }}">
             <i class="far fa-edit"></i>
         </a>
 
@@ -19,14 +19,15 @@
 
         {% endembed %}
     {% endif %}
-        </div>
+    </div>
     </div>
 
     <div>
         {% if figure.figureImages|first %}
-            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100" alt="Responsive image">
+            <img src="{{ asset('uploads/photos/' ~ figure.figureImages|first) }}" class="img-fluid w-100"
+                 alt="Responsive image">
         {% else %}
-            <img src="{{ asset('images/exemple.jpeg')}}" class="img-fluid w-100" alt="Responsive image">
+            <img src="{{ asset('images/exemple.jpeg') }}" class="img-fluid w-100" alt="Responsive image">
         {% endif %}
     </div>
 
@@ -55,8 +56,7 @@
             </div>
 
             {% endfor %}
-
-       </section>
+        </section>
     </div>
 
     <div class="container">
@@ -110,10 +110,11 @@
                 <div class="row">
                     <div class="col-sm-8 offset-sm-2">
                         {% for comment in comments %}
-                            <div class="card bg-light">
+                            <div class="card bg-light one-comment">
                                 <div class="card-body my-20">
                                     <div class="d-flex justify-content-start">
-                                        <img src="https://robohash.org/{{ comment.user.username }}" height="50px" width="50px"
+                                        <img src="https://robohash.org/{{ comment.user.username }}" height="50px"
+                                             width="50px"
                                              alt="Generic placeholder image" class="rounded-circle border border-dark"/>
                                         <div class="d-flex justify-content-start"> {{ comment.user }} </div>
                                     </div>

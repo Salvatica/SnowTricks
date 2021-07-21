@@ -25,7 +25,6 @@ class SecurityController extends AbstractController
     #[Route('/inscription', name: 'security_registration')]
     public function registration(Request $request, UserManager $userManager): RedirectResponse|Response
     {
-
         $user = new User;
         $form = $this->createForm(RegistrationType::class, $user);
 
@@ -33,7 +32,7 @@ class SecurityController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $userManager->register($user, $form['plainPassword']->getData());
-
+            $this->addFlash('message', 'an email has been sent to you');
             return $this->redirectToRoute('app_login');
         }
 
@@ -48,7 +47,7 @@ class SecurityController extends AbstractController
         $manager->activate($user);
         $this->addFlash('message', 'You have successfully activated your account');
 
-        return $this->redirectToRoute('homepage');
+        return $this->redirectToRoute('app_login');
     }
 
     #[Route('/login', name: 'app_login')]
@@ -57,7 +56,6 @@ class SecurityController extends AbstractController
         if ($this->getUser()) {
             return $this->redirectToRoute('homepage');
         }
-
         $error = $authenticationUtils->getLastAuthenticationError();
         $lastUsername = $authenticationUtils->getLastUsername();
 
@@ -92,11 +90,10 @@ class SecurityController extends AbstractController
         }
         // envoie vers la page de demande d'email
         return $this->render('security/forgottenPasswordForm.html.twig', ['emailForm' => $form->createView()]);
-
     }
 
     #[Route('/reset-pass/{token}', name: 'app_reset_password')]
-    public function resetPassword($token, Request $request, UserPasswordEncoderInterface $passwordEncoder, UserManager $userManager)
+    public function resetPassword($token, Request $request,UserManager $userManager)
     {
         // va chercher l'utilisateur avec le token fournit
         $user = $userManager->loadUserByResetToken($token);

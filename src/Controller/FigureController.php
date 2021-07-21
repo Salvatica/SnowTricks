@@ -21,17 +21,14 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Twig\Environment;
 
 
 #[Route('/figure')]
 class FigureController extends AbstractController
 {
-    private $figureManager;
 
-    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer, private FileUploader $fileUploader, FigureManager $manager)
+    public function __construct(private VideoLinkSanitizer $videoLinkSanitizer, private FigureManager $figureManager)
     {
-        $this->figureManager = $manager;
     }
 
     /**
@@ -41,7 +38,7 @@ class FigureController extends AbstractController
      * @IsGranted("ROLE_USER")
      */
     #[Route('/new', name: 'figure_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, EntityManagerInterface $entityManager): Response
+    public function new(Request $request): Response
     {
         $figure = new Figure();
         $form = $this->createForm(FigureType::class, $figure);
@@ -49,11 +46,10 @@ class FigureController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $this->figureManager->handleImages($form->get('files')->getData(), $figure);
-            $entityManager->persist($figure);
-            $entityManager->flush();
+            $this->figureManager->saveFigure($figure);
             $this->addFlash("success", "The addition has been made");
 
-            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
+            return $this->redirectToRoute('figure_edit', ['slug' => $figure->getSlug()]);
         }
 
         return $this->render('figure/create.html.twig', [
@@ -62,23 +58,18 @@ class FigureController extends AbstractController
         ]);
     }
 
-
     #[Route('/{slug}', name: 'figure_show', methods: ['GET', 'POST'])]
     public function show(Request $request, EntityManagerInterface $entityManager, Figure $figure, CommentRepository $commentRepository): Response // rajout du comment
     {
         $offset = max(0, $request->query->getInt('offset', 0));// pagination comments
         $paginator = $commentRepository->getCommentPaginator($figure, $offset);
 
-
         $form = $this->createForm(CommentType::class);
         if($this->getUser()){
             $form->handleRequest($request);
             if ($form->isSubmitted() && $form->isValid()) {
                 $comment = $form->getData();
-                $comment->setFigure($figure);
-                $comment->setUser($this->getUser());
-                $entityManager->persist($comment);
-                $entityManager->flush();
+                $this->figureManager->addComment($figure,$this->getUser(),$comment);
                 return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
             }
         }
@@ -95,7 +86,7 @@ class FigureController extends AbstractController
     /**
     * @IsGranted("ROLE_USER")
     */
-    #[Route('/{id}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/edit', name: 'figure_edit', methods: ['GET', 'POST'])]
     public function edit(Request $request, Figure $figure): Response
     {
         $form = $this->createForm(FigureType::class, $figure);
@@ -106,19 +97,14 @@ class FigureController extends AbstractController
             $photos = $form->get('files')->getData();
             $this->figureManager->handleImages($photos, $figure);
             $figureVideos = $form->get('figureVideos')->getData();
-            /**
-             * @Var FigureVideo $figureVideo
-             */
-            foreach ($figureVideos as $figureVideo) {
-                $url = $figureVideo->getFileName();
-                $figureVideo->setFileName($this->videoLinkSanitizer->clean($url));
-                $figureVideo->setFigure($figure);
-            }
+
+            $this->figureManager->handleVideos($figureVideos, $figure);
+
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "The modification has been made");
 
-            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
+            return $this->redirectToRoute('figure_edit', ['slug' => $figure->getSlug()]);
         }
 
         return $this->render('figure/edit.html.twig', [
@@ -126,7 +112,6 @@ class FigureController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
-
 
     /**
      * @param Request $request
@@ -173,11 +158,11 @@ class FigureController extends AbstractController
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "The modification has been made");
 
-            return $this->redirectToRoute('figure_edit', ['id' => $figure->getId()]);
+            return $this->redirectToRoute('figure_edit', ['slug' => $figure->getSlug()]);
         }
 
         return $this->render('figure/editOneVideo.html.twig', [
-            'figure' => $figureVideo,
+            'figureVideo' => $figureVideo,
             'form' => $form->createView(),
         ]);
     }
@@ -188,10 +173,10 @@ class FigureController extends AbstractController
      * @return Response
      * @IsGranted("ROLE_USER")
      */
-    #[Route('/{id}/remove', name: 'figure_delete', methods: ['GET', 'POST'])]
+    #[Route('/{slug}/remove', name: 'figure_delete', methods: ['GET', 'POST'])]
     public function delete(Request $request, Figure $figure): Response
     {
-        if ($this->isCsrfTokenValid('delete' . $figure->getId(), $request->query->get('_token'))) {
+        if ($this->isCsrfTokenValid('delete' . $figure->getSlug(), $request->query->get('_token'))) {
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($figure);
             $entityManager->flush();
@@ -218,7 +203,7 @@ class FigureController extends AbstractController
         $entityManager->persist($figure);
         $entityManager->flush();
 
-        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
+        return $this->redirectToRoute('figure_edit', array('slug' => $figure->getSlug()));
     }
 
     /**
@@ -239,9 +224,8 @@ class FigureController extends AbstractController
         $entityManager->flush();
 
 
-        return $this->redirectToRoute('figure_edit', array('id' => $figure->getId()));
+        return $this->redirectToRoute('figure_edit', array('slug' => $figure->getSlug()));
     }
-
 
     /**
      * @param Request $request
@@ -263,7 +247,6 @@ class FigureController extends AbstractController
 
         return $this->redirectToRoute('figure_show', ['slug' => $figure->getSlug()]);
     }
-
 
     /**
      * @param $videos

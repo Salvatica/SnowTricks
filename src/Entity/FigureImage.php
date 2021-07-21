@@ -47,7 +47,6 @@ class FigureImage
     public function setFileName(string $fileName): self
     {
         $this->fileName = $fileName;
-
         return $this;
     }
 
@@ -59,7 +58,6 @@ class FigureImage
     public function setFigure(?Figure $figure): self
     {
         $this->figure = $figure;
-
         return $this;
     }
 

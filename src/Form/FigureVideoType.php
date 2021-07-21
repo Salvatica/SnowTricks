@@ -24,7 +24,6 @@ class FigureVideoType extends AbstractType
                 $video->setFileName($this->sanitizer->clean($input));
 
             },
-
         ]);
     }
 

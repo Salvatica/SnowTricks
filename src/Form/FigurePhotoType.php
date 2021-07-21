@@ -25,7 +25,6 @@ use Symfony\Component\Validator\Constraints\Image;
 class FigurePhotoType extends AbstractType
 
 {
-
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder

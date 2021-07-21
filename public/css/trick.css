@@ -91,6 +91,7 @@ footer p {
 #action-icons {
     position: absolute;
     right: 300px;
+
 }
 
 .photo-list {
@@ -99,6 +100,7 @@ footer p {
 
 .btn {
     flex-flow: row-reverse;
+
 }
 
 .img-thumbnail {
@@ -109,6 +111,13 @@ footer p {
 
 .entete .position-absolute {
     right: 0;
+}
+.fa-trash-alt{
+    color: red;
+}
+
+.fa-edit{
+    color: green;
 }
 
 

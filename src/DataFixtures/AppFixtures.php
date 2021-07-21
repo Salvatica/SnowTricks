@@ -42,7 +42,6 @@ class AppFixtures extends Fixture
             $userList[] = $user;
             $user->setPassword($hash);
             $manager->persist($user);
-
         }
 
         $categoryList = [];

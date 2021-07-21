@@ -90,7 +90,6 @@ class User implements UserInterface
     public function setName(string $name): ?self
     {
         $this->name = $name;
-
         return $this;
     }
 
@@ -102,7 +101,6 @@ class User implements UserInterface
     public function setEmail(string $email): self
     {
         $this->email = $email;
-
         return $this;
     }
 
@@ -127,7 +125,6 @@ class User implements UserInterface
     public function setPassword(string $password): self
     {
         $this->password = $password;
-
         return $this;
     }
 
@@ -146,7 +143,6 @@ class User implements UserInterface
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
-
         return $this;
     }
 
@@ -170,7 +166,6 @@ class User implements UserInterface
             $this->comments[] = $comment;
             $comment->setUser($this);
         }
-
         return $this;
     }
 
@@ -182,7 +177,6 @@ class User implements UserInterface
                 $comment->setUser(null);
             }
         }
-
         return $this;
     }
 
@@ -202,9 +196,7 @@ class User implements UserInterface
      */
     public function eraseCredentials()
     {
-        // TODO: Implement eraseCredentials() method.
-        // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public function getActivationToken(): ?string

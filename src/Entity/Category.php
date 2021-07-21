@@ -44,7 +44,6 @@ class Category
         return $this->title;
     }
 
-
     public function getId(): ?int
     {
         return $this->id;
@@ -88,7 +87,6 @@ class Category
             $this->figure[] = $figure;
             $figure->setCategory($this);
         }
-
         return $this;
     }
 
@@ -100,7 +98,6 @@ class Category
                 $figure->setCategory(null);
             }
         }
-
         return $this;
     }
 }

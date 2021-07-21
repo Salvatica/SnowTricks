@@ -18,7 +18,6 @@ class UserManager
         private AppMailer $appMailer,
         private UrlGeneratorInterface $router)
     {
-
     }
 
     public function activate(User $user)
@@ -49,12 +48,8 @@ class UserManager
     public function forgotPass(User $user)
     {
         $token = $this->createResetToken($user);
-        $url = $this->router->generate('app_reset_password', ['token' => $token], UrlGeneratorInterface::ABSOLUTE_URL);
-
         $this->appMailer->sendForgottenMail($user);
-        return $url;
     }
-
 
     /**
      * @param User $user
@@ -68,7 +63,6 @@ class UserManager
         $user->setPassword($this->passwordEncoder->encodePassword($user, $newPass));
         $this->saveUser($user);
     }
-
 
     /**
      * @param $token
