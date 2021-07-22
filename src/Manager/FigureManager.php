@@ -8,6 +8,7 @@ use App\Entity\FigureVideo;
 use App\Entity\User;
 use App\Service\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
+use App\Service\VideoLinkSanitizer;
 
 class FigureManager
 {
@@ -16,7 +17,8 @@ class FigureManager
      */
     public function __construct(
         private FileUploader $fileUploader,
-        private EntityManagerInterface $entityManager)
+        private EntityManagerInterface $entityManager,
+        private VideoLinkSanitizer $videoLinkSanitizer)
     {
     }
 
@@ -34,13 +36,12 @@ class FigureManager
         }
     }
 
-    public function handleVideos($videos, Figure $figureVideos)
+    public function handleVideos($videos, Figure $figure)
     {
-        foreach ($figureVideos as $figureVideo){
-            $fileName = $this->fileUploader->upload($figureVideo);
-            $figureVideo = new FigureVideo;
-            $figureVideo->setFileName($fileName);
-            $videos->addFigureVideo($figureVideo);
+        foreach ($videos as $video) {
+            $url = $video->getFileName();
+            $video->setFileName($this->videoLinkSanitizer->clean($url));
+            $video->setFigure($figure);
         }
     }
 

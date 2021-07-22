@@ -97,9 +97,11 @@ class FigureController extends AbstractController
             $photos = $form->get('files')->getData();
             $this->figureManager->handleImages($photos, $figure);
             $figureVideos = $form->get('figureVideos')->getData();
+            /**
+             * @Var FigureVideo $figureVideo
+             */
 
             $this->figureManager->handleVideos($figureVideos, $figure);
-
 
             $this->getDoctrine()->getManager()->flush();
             $this->addFlash("success", "The modification has been made");

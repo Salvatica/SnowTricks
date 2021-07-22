@@ -31,7 +31,7 @@ class SmokeTest extends WebTestCase
         $client = static::createClient();
         $crawler = $client->request('GET', '/figure/montagne-1?offset=10');
         $this->assertResponseIsSuccessful();
-        $this->assertSelectorTextContains('.one-comment', 'My comment 10');
+        $this->assertSelectorTextContains('.one-comment', 'My comment 11');
         $this->assertCount(10, $crawler->filter('.one-comment'));
     }
 
@@ -81,13 +81,12 @@ class SmokeTest extends WebTestCase
         //On connecte le user
         $client->loginUser($testUser);
 
-        $csrfToken = $client->getContainer()->get('security.csrf.token_manager')->getToken('remove');
+        $csrfToken = $client->getContainer()->get('security.csrf.token_manager')->getToken('deletemontagne-13');
         //on affiche le formulaire d'édition
-        $crawler = $client->request('GET', '/figure/montagne-13/remove');
+        $crawler = $client->request('GET', '/figure/montagne-13/remove', ['_token' => $csrfToken]);
 
         $this->assertResponseStatusCodeSame(302);
-
-
+        $client->followRedirect();
     }
 
     public function testRegistration(): void
@@ -109,8 +108,6 @@ class SmokeTest extends WebTestCase
         //On connecte le user
         $client->loginUser($testUser);
 
-        $csrfToken = $client->getContainer()->get('security.csrf.token_manager')->getToken('login');
-
         $crawler = $client->request('GET', '/login');
         $this->assertResponseStatusCodeSame(302);
 
@@ -126,8 +123,6 @@ class SmokeTest extends WebTestCase
 
         //On connecte le user
         $client->loginUser($testUser);
-
-        $csrfToken = $client->getContainer()->get('security.csrf.token_manager')->getToken('logout');
 
         $crawler = $client->request('GET', '/logout');
         $this->assertResponseStatusCodeSame(302);

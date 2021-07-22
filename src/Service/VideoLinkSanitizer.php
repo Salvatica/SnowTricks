@@ -15,7 +15,6 @@ class VideoLinkSanitizer
 
         preg_match('#\bhttps?://[^,\s()<>]+(?:\([\w\d]+\)|([^,[:punct:]\s]|/))#', $input, $matches);
 
-        dump($matches);
         if (empty($matches)) {
             return $input;
         } else {
@@ -23,12 +22,18 @@ class VideoLinkSanitizer
         }
 
         $domainName = parse_url($url, PHP_URL_HOST);
+        $query = parse_url($url, PHP_URL_QUERY);
         if (str_contains($domainName, 'youtu.be')) {
             $youtubeId = parse_url($url, PHP_URL_PATH);
             return "https://www.youtube.com/embed" . $youtubeId;
         }
         if (str_contains($url, 'youtube.com/embed')) {
             return $url;
+        }
+        if (str_contains($url, 'youtube.com/watch')) {
+            parse_str($query, $urlParameters);
+            $transformedUrl = "https://www.youtube.com/embed/" . $urlParameters['v'];
+            return $transformedUrl;
         }
 
         if (str_contains($domainName, 'dai.ly')) {

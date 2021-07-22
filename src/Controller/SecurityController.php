@@ -13,9 +13,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-
 use App\Entity\User;
-
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 
@@ -85,7 +83,7 @@ class SecurityController extends AbstractController
             }
             $userManager->forgotPass($user);
 
-            $this->addFlash('message', 'a password reset email has been sent to you');
+            $this->addFlash('success', 'a password reset email has been sent to you');
             return $this->redirectToRoute('app_login');
         }
         // envoie vers la page de demande d'email
